@@ -1,48 +1,48 @@
-from models.assuntoModel import inserir_assunto, buscar_todos_assuntos, buscar_assunto_por_id, atualizar_assunto, excluir_assunto
+from database.db import get_connection
 
-def criar_assunto(payload):
-    usuario_id = (payload.get("usuario_id") or "")
-    titulo = (payload.get("titulo") or "").strip()
-    if not usuario_id or not titulo:
-        return {"erro": "Campos obrigatórios não preenchidos."}, 400
-    try:
-        novo_id = inserir_assunto(usuario_id, titulo)
-        return {"mensagem": "Assunto criado com sucesso.", "id": novo_id}, 201
-    except Exception as e:
-        return {"erro": str(e)}, 500
+def inserir_assunto(usuario_id, titulo):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO assunto (usuario_id, titulo) VALUES (?, ?)",
+        (usuario_id, titulo)
+    )
+    conn.commit()
+    novo_id = cursor.lastrowid
+    conn.close()
+    return novo_id
 
-def listar_assuntos():
-    dados = buscar_todos_assuntos()
-    return dados, 200
+def buscar_todos_assuntos():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM assunto")
+    dados = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return dados
 
-def listar_assunto_por_id(id):
-    row = buscar_assunto_por_id(id)
-    if row is None:
-        return {"erro": "Assunto não encontrado."}, 404
-    return dict(row), 200
+def buscar_assunto_por_id(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM assunto WHERE id = ?", (id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row
 
-def editar_assunto(id, payload):
-    campos = []
-    valores = []
-    for campo in ["usuario_id", "titulo"]:
-        if campo in payload and payload[campo]:
-            campos.append(f"{campo} = ?")
-            valores.append(payload[campo].strip())
-    if not campos:
-        return {"erro": "Nenhum campo válido enviado para atualização."}, 400
-    try:
-        linhas = atualizar_assunto(id, campos, valores)
-        if linhas == 0:
-            return {"erro": "Assunto não encontrado."}, 404
-        return {"mensagem": "Assunto atualizado com sucesso."}, 200
-    except Exception as e:
-        return {"erro": str(e)}, 500
+def atualizar_assunto(id, campos, valores):
+    conn = get_connection()
+    cursor = conn.cursor()
+    valores.append(id)
+    cursor.execute(f"UPDATE assunto SET {', '.join(campos)} WHERE id = ?", valores)
+    conn.commit()
+    linhas_afetadas = cursor.rowcount
+    conn.close()
+    return linhas_afetadas
 
-def deletar_assunto(id):
-    try:
-        linhas = excluir_assunto(id)
-        if linhas == 0:
-            return {"erro": "Assunto não encontrado."}, 404
-        return {"mensagem": "Assunto excluído com sucesso."}, 200
-    except Exception as e:
-        return {"erro": str(e)}, 500
+def excluir_assunto(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM assunto WHERE id = ?", (id,))
+    conn.commit()
+    linhas_afetadas = cursor.rowcount
+    conn.close()
+    return linhas_afetadas
