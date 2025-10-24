@@ -1,8 +1,15 @@
 from database.db import get_connection
 
+def _clean_value(value):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
 def criar_assunto(payload: dict):
-    usuario_id = (payload.get("usuario_id") or "")
-    titulo = (payload.get("titulo") or "").strip()
+    usuario_id = _clean_value(payload.get("usuario_id"))
+    titulo = _clean_value(payload.get("titulo"))
     
 
     if not usuario_id or not titulo:

@@ -1,9 +1,16 @@
 from database.db import get_connection
 
+def _clean_value(value):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
 def criar_usuario(payload: dict):
-    nome = (payload.get("nome") or "").strip()
-    email = (payload.get("email") or "").strip()
-    senha = (payload.get("senha") or "").strip()
+    nome = _clean_value(payload.get("nome"))
+    email = _clean_value(payload.get("email"))
+    senha = _clean_value(payload.get("senha"))
 
     if not nome or not email or not senha:
         return {"erro": "Campos 'nome', 'email' e 'senha' são obrigatórios."}, 400

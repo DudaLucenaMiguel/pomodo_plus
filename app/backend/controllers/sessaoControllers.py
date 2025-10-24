@@ -1,13 +1,20 @@
 from database.db import get_connection
 
+def _clean_value(value):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
 def criar_sessao(payload: dict):
-    usuario_id = (payload.get("usuario_id") or "")
-    ciclo_id = (payload.get("ciclo_id") or "")
-    assunto_id = (payload.get("assunto_id") or "")
-    tema_id = (payload.get("tema_id") or "")
-    inicio = (payload.get("inicio") or "")
-    fim = (payload.get("fim") or "")
-    status = (payload.get("status") or "")
+    usuario_id = _clean_value(payload.get("usuario_id"))
+    ciclo_id = _clean_value(payload.get("ciclo_id"))
+    assunto_id = _clean_value(payload.get("assunto_id"))
+    tema_id = _clean_value(payload.get("tema_id"))
+    inicio = _clean_value(payload.get("inicio"))
+    fim = _clean_value(payload.get("fim"))
+    status = _clean_value(payload.get("status"))
     
     if not usuario_id or not ciclo_id or not inicio or not status:
           return {"erro": "Campos obrigatórios não preenchidos."}, 400

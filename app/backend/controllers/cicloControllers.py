@@ -1,11 +1,20 @@
 from database.db import get_connection
 
+def _clean_value(value):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
+
+
 def criar_ciclo(payload: dict):
-    usuario_id = (payload.get("usuario_id") or "").strip()
-    repeticoes = (payload.get("repeticoes") or "").strip()
-    tempo_estudo = (payload.get("tempo_estudo") or "").strip()
-    tempo_descanso = (payload.get("tempo_descanso") or "").strip()
-    tempo_entre_ciclos = (payload.get("usuario_id") or "").strip()
+    usuario_id = _clean_value(payload.get("usuario_id"))
+    repeticoes = _clean_value(payload.get("repeticoes"))
+    tempo_estudo = _clean_value(payload.get("tempo_estudo"))
+    tempo_descanso = _clean_value(payload.get("tempo_descanso"))
+    tempo_entre_ciclos = _clean_value(payload.get("tempo_entre_ciclos"))
     
     if not usuario_id or not repeticoes or not tempo_estudo or not tempo_descanso or not tempo_entre_ciclos:
           return {"erro": "Campos obrigatórios não preenchidos."}, 400
@@ -15,8 +24,8 @@ def criar_ciclo(payload: dict):
 
     try:
         cursor.execute(
-            "INSERT INTO ciclo (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos) VALUES (?, ?, ?, ?)",
-            (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos)
+            "INSERT INTO ciclo (usuario_id, repeticoes, tempo_estudo, tempo_descanso, tempo_entre_ciclos) VALUES (?, ?, ?, ?)",
+            (usuario_id, repeticoes, tempo_estudo, tempo_descanso, tempo_entre_ciclos)
         )
         conn.commit()
         novo_id = cursor.lastrowid
