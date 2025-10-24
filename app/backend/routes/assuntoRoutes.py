@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from controllers.assuntoControllers import (
    criar_assunto,
-   listar_assunto,
+   listar_assuntos,
    listar_assunto_por_id,
    editar_assunto,
    deletar_assunto
@@ -18,7 +18,7 @@ def post_assunto():
 
 @assunto_bp.route("/assunto", methods=["GET"])
 def get_assunto():
-    body, status = listar_assunto()
+    body, status = listar_assuntos()
     return jsonify(body), status
 
 
