@@ -1,4 +1,4 @@
-from app.models.assuntoModel import inserir_assunto, buscar_todos_assuntos, buscar_assunto_por_id, atualizar_assunto, excluir_assunto
+from models.assuntoModel import inserir_assunto, buscar_todos_assuntos, buscar_assunto_por_id, atualizar_assunto, excluir_assunto
 
 def criar_assunto(payload):
     usuario_id = (payload.get("usuario_id") or "")
