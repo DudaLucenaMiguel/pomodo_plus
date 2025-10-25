@@ -1,6 +1,6 @@
 import useFetch from "./useFetch";
 import { withAbort } from "../services/http";
-import { SessoesService } from "../services/sessoes.service";
+import { SessoesService } from "../services/api.service";
 
 export function useSessoes(params) {
   return useFetch(() => withAbort((signal) => SessoesService.list(params, signal)),

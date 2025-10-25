@@ -1,6 +1,6 @@
 import useFetch from "./useFetch";
 import { withAbort } from "../services/http";
-import { AssuntosService } from "../services/assuntos.service";
+import { AssuntosService } from "../services/api.service";
 
 export function useAssuntos(params) {
   return useFetch(() => withAbort((signal) => AssuntosService.list(params, signal)),

@@ -1,6 +1,6 @@
 import useFetch from "./useFetch";
 import { withAbort } from "../services/http";
-import { TemasService } from "../services/temas.service";
+import { TemasService } from "../services/api.service";
 
 export function useTemas(params) {
   return useFetch(() => withAbort((signal) => TemasService.list(params, signal)),

@@ -1,6 +1,6 @@
 import useFetch from "./useFetch";
 import { withAbort } from "../services/http";
-import { UsuariosService } from "../services/usuarios.service";
+import { UsuariosService } from "../services/api.service";
 
 export function useUsuarios(params) {
   return useFetch(() => withAbort((signal) => UsuariosService.list(params, signal)),

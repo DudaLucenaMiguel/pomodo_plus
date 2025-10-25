@@ -1,6 +1,6 @@
 import useFetch from "./useFetch";
 import { withAbort } from "../services/http";
-import { CiclosService } from "../services/ciclos.service";
+import { CiclosService } from "../services/api.service";
 
 export function useCiclos(params) {
   return useFetch(() => withAbort((signal) => CiclosService.list(params, signal)),
