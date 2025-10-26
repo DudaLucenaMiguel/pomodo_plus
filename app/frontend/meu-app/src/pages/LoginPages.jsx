@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useLogin } from "../hooks/useAuth";
 import "./LoginPages.css";
 
 function isEmail(v) {
@@ -14,12 +15,7 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-
-  const testUsers = [
-    { email: "duda@exemplo.com", password: "123456" },
-    { email: "teste@exemplo.com", password: "abcdef" },
-    { email: "user@exemplo.com", password: "senha123" },
-  ];
+  const login = useLogin();
 
   const isValid = useMemo(
     () => isEmail(email) && String(password).length >= 6,
@@ -33,19 +29,25 @@ export default function LoginPage() {
     setError("");
     try {
       const eClean = email.trim().toLowerCase();
-      const ok = testUsers.some(
-        (u) => u.email.toLowerCase() === eClean && u.password === password
-      );
-      if (!ok) {
-        setError("Credenciais inválidas. Verifique e tente novamente.");
-        return;
+      const { promise } = login({ email: eClean, senha: password });
+      const data = await promise;
+      const token = data?.token || "";
+      if (token) {
+        const session = JSON.stringify({
+          token,
+          usuario: data?.usuario ?? null,
+          remember,
+          ts: Date.now(),
+        });
+        localStorage.setItem("auth_token", session);
       }
-      const token = JSON.stringify({ email: eClean, ts: Date.now(), remember });
-      localStorage.setItem("auth_token", token);
       const redirectTo = location.state?.from?.pathname || "/timer";
       navigate(redirectTo, { replace: true });
-    } catch {
-      setError("Não foi possível entrar. Tente novamente.");
+    } catch (err) {
+      const message =
+        err?.raw?.response?.data?.erro || err?.message ||
+        "Não foi possível entrar. Tente novamente.";
+      setError(message);
     } finally {
       setSubmitting(false);
     }
