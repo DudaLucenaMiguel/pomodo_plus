@@ -1,0 +1,109 @@
+/* ===== Tokens e escala fluida ===== */
+:root {
+  --space-1: clamp(2px, 0.3vw, 4px);
+  --space-2: clamp(4px, 0.6vw, 8px);
+  --space-3: clamp(8px, 0.9vw, 12px);
+  --space-4: clamp(12px, 1.2vw, 16px);
+  --space-5: clamp(16px, 1.6vw, 24px);
+  --radius: 12px;
+
+  --fs-sm: clamp(10px, 1vw, 12px);
+  --fs-md: clamp(14px, 1.2vw, 16px);
+  --fs-lg: clamp(18px, 2vw, 22px);
+
+  --brand: #ff0000;
+  --surface: #ffffff1a;
+  --text-white: #ffffff;
+  --text-black: #000000;
+}
+
+/* ===== Layout principal ===== */
+.contain {
+  display: flex;
+  flex-direction: column;
+  background: var(--text-black);
+  min-height: 100dvh;
+  padding: var(--space-4);
+  color: var(--text-white);
+}
+
+.scroll-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* ===== Banner superior ===== */
+.image {
+  width: 100%;
+  max-width: 880px;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* ===== Estrutura principal ===== */
+.column {
+  width: min(100%, 880px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+/* Seções de perfil (nome e e-mail) */
+.column3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+.text {
+  font-size: var(--fs-md);
+  color: var(--text-white);
+}
+.view {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+}
+.text2 {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--text-black);
+}
+
+/* ===== Botão principal ===== */
+.button {
+  width: 100%;
+  background: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  color: var(--text-black);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.button:hover {
+  transform: scale(1.03);
+  background: #f0f0f0;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 480px) {
+  .column {
+    padding: var(--space-3);
+  }
+  .view {
+    padding: var(--space-2);
+  }
+  .text2 {
+    font-size: var(--fs-sm);
+  }
+}
