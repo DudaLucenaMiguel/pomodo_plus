@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPages.css";
+import { AuthService } from "../services/api.service";
 
 function isEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
@@ -15,12 +16,6 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const testUsers = [
-    { email: "duda@exemplo.com", password: "123456" },
-    { email: "teste@exemplo.com", password: "abcdef" },
-    { email: "user@exemplo.com", password: "senha123" },
-  ];
-
   const isValid = useMemo(
     () => isEmail(email) && String(password).length >= 6,
     [email, password]
@@ -32,20 +27,14 @@ export default function LoginPage() {
     setSubmitting(true);
     setError("");
     try {
-      const eClean = email.trim().toLowerCase();
-      const ok = testUsers.some(
-        (u) => u.email.toLowerCase() === eClean && u.password === password
-      );
-      if (!ok) {
-        setError("Credenciais inválidas. Verifique e tente novamente.");
-        return;
-      }
-      const token = JSON.stringify({ email: eClean, ts: Date.now(), remember });
-      localStorage.setItem("auth_token", token);
+      const payload = { email, senha: password };
+      const data = await AuthService.login(payload);
+      if (!data?.usuario?.id) throw new Error("Credenciais inválidas.");
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
       const redirectTo = location.state?.from?.pathname || "/timer";
       navigate(redirectTo, { replace: true });
-    } catch {
-      setError("Não foi possível entrar. Tente novamente.");
+    } catch (err) {
+      setError(err?.message || "Não foi possível entrar. Tente novamente.");
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +94,6 @@ export default function LoginPage() {
               />
               <span>Lembrar-me</span>
             </label>
-
           </div>
 
           {error && <div className="login-page__error">{error}</div>}

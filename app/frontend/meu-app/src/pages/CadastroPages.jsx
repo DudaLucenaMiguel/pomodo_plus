@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CadastroPages.css";
+import { AuthService } from "../services/api.service";
 
 function isEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
 }
 
-function CadastroPages() {
+export default function CadastroPages() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,9 +17,7 @@ function CadastroPages() {
 
   const isValid = useMemo(
     () =>
-      String(name).trim().length >= 2 &&
-      isEmail(email) &&
-      String(password).length >= 6,
+      name.trim().length >= 2 && isEmail(email) && password.trim().length >= 6,
     [name, email, password]
   );
 
@@ -28,13 +27,13 @@ function CadastroPages() {
     setSubmitting(true);
     setError("");
     try {
-      const payload = { name: name.trim(), email: email.trim() };
-      console.log("Cadastro simulado:", payload);
-      setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 400);
+      const payload = { nome: name.trim(), email: email.trim(), senha: password };
+      const data = await AuthService.register(payload);
+      if (!data?.id && !data?.usuario?.id)
+        throw new Error("Erro ao cadastrar usuário.");
+      navigate("/login", { replace: true });
     } catch (err) {
-      setError("Não foi possível criar sua conta. Tente novamente.");
+      setError(err?.message || "Não foi possível criar sua conta.");
     } finally {
       setSubmitting(false);
     }
@@ -51,9 +50,7 @@ function CadastroPages() {
 
         <form className="signup-page__form" onSubmit={handleSubmit} noValidate>
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="name">
-              Nome
-            </label>
+            <label className="signup-page__label" htmlFor="name">Nome</label>
             <input
               id="name"
               type="text"
@@ -66,9 +63,7 @@ function CadastroPages() {
           </div>
 
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="email">
-              E-mail
-            </label>
+            <label className="signup-page__label" htmlFor="email">E-mail</label>
             <input
               id="email"
               type="email"
@@ -81,9 +76,7 @@ function CadastroPages() {
           </div>
 
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="password">
-              Senha
-            </label>
+            <label className="signup-page__label" htmlFor="password">Senha</label>
             <input
               id="password"
               type="password"
@@ -91,8 +84,8 @@ function CadastroPages() {
               placeholder="mínimo 6 caracteres"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              minLength={6}
               required
+              minLength={6}
             />
           </div>
 
@@ -121,5 +114,3 @@ function CadastroPages() {
     </div>
   );
 }
-
-export default CadastroPages;

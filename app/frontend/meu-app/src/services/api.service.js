@@ -1,5 +1,5 @@
 import { makeCrudService } from "./crudFactory";
-import { getJSON } from "./http";
+import { getJSON, postJSON } from "./http";
 
 const CICLOS_BASE_PATH = "/ciclo";
 const SESSOES_BASE_PATH = "/sessao";
@@ -19,5 +19,9 @@ export const SessoesService = {
 };
 
 export const TemasService = makeCrudService("/tema");
-
 export const UsuariosService = makeCrudService("/usuario");
+
+export const AuthService = {
+  login: (payload, signal) => postJSON("/login", payload, signal),
+  register: (payload, signal) => postJSON("/cadastro", payload, signal),
+};
