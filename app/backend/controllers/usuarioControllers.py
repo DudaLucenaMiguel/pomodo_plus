@@ -38,24 +38,6 @@ def listar_usuario_por_id(id):
     return dict(row), 200
 
 
-def autenticar_usuario(payload):
-    email = (payload.get("email") or "").strip()
-    senha = (payload.get("senha") or "").strip()
-    if not email or not senha:
-        return {"erro": "Campos 'email' e 'senha' são obrigatórios."}, 400
-
-    row = buscar_usuario_por_email(email)
-    if row is None or row["senha"] != senha:
-        return {"erro": "Credenciais inválidas."}, 401
-
-    usuario = {
-        "id": row["id"],
-        "nome": row["nome"],
-        "email": row["email"],
-    }
-    return {"mensagem": "Login bem-sucedido.", "usuario": usuario}, 200
-
-
 def editar_usuario(id, payload):
     campos = []
     valores = []
