@@ -23,9 +23,11 @@
   padding: var(--space-2);
   cursor: pointer;
   color: var(--color-text-light);
-  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease,
+    color 0.18s ease;
 }
 
+.sidebar__button--active,
 .sidebar__button:hover,
 .sidebar__button:focus-visible {
   transform: scale(1.05);
@@ -34,6 +36,13 @@
 .sidebar__button:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.6);
   outline-offset: 2px;
+}
+
+.sidebar__button--active,
+.sidebar__button:hover {
+  background: var(--color-overlay);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  color: var(--color-text-dark);
 }
 
 .sidebar__icon {
