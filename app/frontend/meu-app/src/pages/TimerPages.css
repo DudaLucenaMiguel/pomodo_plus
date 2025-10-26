@@ -1,5 +1,4 @@
 .timer-page {
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, var(--color-brand), var(--color-brand-strong));
