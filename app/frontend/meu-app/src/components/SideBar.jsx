@@ -1,39 +1,40 @@
-import React from "react"
-import { useNavigate, useLocation } from "react-router-dom"
-import "./SideBar.css"
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./SideBar.css";
 
 export default function SideBar() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { label: "Histórico", path: "/historico", icon: "calendar_month" },
     { label: "Cronômetro", path: "/cronometro", icon: "timer" },
-    { label: "Ciclos", path: "/ciclos", icon: "autorenew" },
-    { label: "Ajustes", path: "/ajustes", icon: "tune" },
-  ]
+    { label: "Ciclos", path: "/ciclos", icon: "refresh" },
+    { label: "Ajustes", path: "/ajustes", icon: "settings" },
+  ];
 
   return (
     <div className="sidebar">
       {navItems.map(({ label, path, icon }) => {
         const isActive =
-          location.pathname === path || location.pathname.startsWith(`${path}/`)
+          location.pathname === path ||
+          location.pathname.startsWith(`${path}/`);
 
         return (
           <button
             key={path}
             type="button"
-            className={`sidebar__button${isActive ? " sidebar__button--active" : ""}`}
+            className={`sidebar__button${
+              isActive ? " sidebar__button--active" : ""
+            }`}
             onClick={() => navigate(path)}
             aria-current={isActive ? "page" : undefined}
           >
-            <span className="sidebar__icon material-symbols-outlined" aria-hidden="true">
-              {icon}
-            </span>
+            <span className="material-symbols-outlined">{icon}</span>
             <span className="sidebar__label">{label}</span>
           </button>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
