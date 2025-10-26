@@ -1,13 +1,18 @@
 from database.db import get_connection
 
+
 def inserir_usuario(nome, email, senha):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha))
+    cursor.execute(
+        "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)",
+        (nome, email, senha),
+    )
     conn.commit()
     novo_id = cursor.lastrowid
     conn.close()
     return novo_id
+
 
 def buscar_todos_usuarios():
     conn = get_connection()
@@ -17,6 +22,7 @@ def buscar_todos_usuarios():
     conn.close()
     return dados
 
+
 def buscar_usuario_por_id(id):
     conn = get_connection()
     cursor = conn.cursor()
@@ -24,6 +30,16 @@ def buscar_usuario_por_id(id):
     row = cursor.fetchone()
     conn.close()
     return row
+
+
+def buscar_usuario_por_email(email):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM usuario WHERE LOWER(email) = LOWER(?)", (email,))
+    row = cursor.fetchone()
+    conn.close()
+    return row
+
 
 def atualizar_usuario(id, campos, valores):
     conn = get_connection()
@@ -34,6 +50,7 @@ def atualizar_usuario(id, campos, valores):
     linhas_afetadas = cursor.rowcount
     conn.close()
     return linhas_afetadas
+
 
 def excluir_usuario(id):
     conn = get_connection()

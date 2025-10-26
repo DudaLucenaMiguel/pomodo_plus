@@ -4,7 +4,7 @@ from controllers.usuarioControllers import (
     listar_usuarios,
     listar_usuario_por_id,
     editar_usuario,
-    deletar_usuario
+    deletar_usuario,
 )
 
 usuario_bp = Blueprint("usuario_bp", __name__)
