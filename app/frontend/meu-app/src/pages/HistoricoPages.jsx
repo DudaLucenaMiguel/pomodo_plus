@@ -1,23 +1,20 @@
-import React from "react";
-import "./HistoricoPages.css";
-import SideBar from "../components/SideBar";
-import HistoricoCard from "../components/HistoricoCard";
+import React from "react"
+import "./HistoricoPages.css"
+import SideBar from "../components/SideBar"
+import HistoricoCard from "../components/HistoricoCard"
 
 function HistoricoPages() {
   return (
-    <div className="contain">
-      <div className="scroll-view">
-        <div className="view">
-          <span className="text">Histórico</span>
+    <div className="history-page">
+      <div className="history-page__content">
+        <div className="history-page__header">
+          <span className="history-page__title">Histórico</span>
         </div>
-        <div>
-          <HistoricoCard />
-        </div>
-        {/* Navbar externa */}
+        <HistoricoCard />
         <SideBar />
       </div>
     </div>
-  );
+  )
 }
 
-export default HistoricoPages;
+export default HistoricoPages
