@@ -1,90 +1,85 @@
-/* ===== Tokens e escala fluida (somente o necessário à página) ===== */
-:root {
-  --space-1: clamp(2px, 0.3vw, 4px);
-  --space-2: clamp(4px, 0.6vw, 8px);
-  --space-3: clamp(8px, 0.9vw, 12px);
-  --space-4: clamp(12px, 1.2vw, 16px);
-  --space-5: clamp(16px, 1.6vw, 24px);
-  --radius: 12px;
-
-  --fs-sm: clamp(10px, 1vw, 12px);
-  --fs-md: clamp(14px, 1.2vw, 16px);
-  --fs-lg: clamp(18px, 2vw, 24px);
-  --fs-xl: clamp(22px, 2.4vw, 28px);
-
-  --brand: #ff0000;
-  --surface: #ffffff1a;
-  --text-white: #ffffff;
-  --text-black: #000000;
-}
-
-/* Card principal do ciclo */
-.column {
+.ciclo-card {
   width: min(100%, 880px);
-  background: var(--surface);
-  border-radius: var(--radius);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
-/* Título do ciclo + ícone de edição */
-.row-view {
+
+.ciclo-card__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.text2 {
-  font-size: var(--fs-lg);
+
+.ciclo-card__title {
+  font-size: var(--font-size-lg);
   font-weight: 700;
 }
-.image {
+
+.ciclo-card__edit-icon {
   width: clamp(24px, 4vw, 30px);
   aspect-ratio: 1;
   object-fit: contain;
 }
-/* Linhas de parâmetros do ciclo */
-.column2 {
+
+.ciclo-card__details {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--space-2);
 }
-.row-view2 {
+
+.ciclo-card__detail-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  gap: var(--space-2);
 }
-.view2 {
+
+.ciclo-card__label {
+  font-size: var(--font-size-sm);
+}
+
+.ciclo-card__value {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface);
-  border-radius: 4px;
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-3);
 }
-.text3 {
-  font-size: var(--fs-sm);
-  text-align: start;
+
+.ciclo-card__value-text {
+  font-size: var(--font-size-xs);
 }
-/* Botão de iniciar sessão */
-.button {
-  background: var(--brand);
+
+.ciclo-card__start-button {
+  background: var(--color-brand);
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: var(--space-3);
-  font-size: var(--fs-md);
+  font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--text-white);
+  color: var(--color-text-light);
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
 }
-.button:hover { transform: scale(1.05); }
-/* ===== Responsividade ===== */
+
+.ciclo-card__start-button:hover {
+  transform: scale(1.05);
+}
+
 @media (max-width: 480px) {
-  .row-view, .row-view2 {
+  .ciclo-card__header,
+  .ciclo-card__detail-row {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-1);
+  }
+
+  .ciclo-card__start-button {
+    width: 100%;
   }
 }

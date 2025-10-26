@@ -1,109 +1,90 @@
-/* ===== Tokens e escala fluida ===== */
-:root {
-  --space-1: clamp(2px, 0.3vw, 4px);
-  --space-2: clamp(4px, 0.6vw, 8px);
-  --space-3: clamp(8px, 0.9vw, 12px);
-  --space-4: clamp(12px, 1.2vw, 16px);
-  --space-5: clamp(16px, 1.6vw, 24px);
-  --radius: 12px;
-
-  --fs-sm: clamp(10px, 1vw, 12px);
-  --fs-md: clamp(14px, 1.2vw, 16px);
-  --fs-lg: clamp(18px, 2vw, 22px);
-
-  --brand: #ff0000;
-  --surface: #ffffff1a;
-  --text-white: #ffffff;
-  --text-black: #000000;
-}
-
-/* ===== Layout principal ===== */
-.contain {
+.profile-edit-page {
   display: flex;
   flex-direction: column;
-  background: var(--text-black);
+  background: var(--color-text-dark);
+  color: var(--color-text-light);
   min-height: 100dvh;
   padding: var(--space-4);
-  color: var(--text-white);
 }
 
-.scroll-view {
+.profile-edit-page__content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
 }
 
-/* ===== Banner superior ===== */
-.image {
+.profile-edit-page__banner {
   width: 100%;
   max-width: 880px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   object-fit: cover;
 }
 
-/* ===== Estrutura principal ===== */
-.column {
+.profile-edit-page__card {
   width: min(100%, 880px);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  background: var(--surface);
-  border-radius: var(--radius);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   padding: var(--space-4);
 }
 
-/* Seções de perfil (nome e e-mail) */
-.column3 {
+.profile-edit-page__fields {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-1);
-}
-.text {
-  font-size: var(--fs-md);
-  color: var(--text-white);
-}
-.view {
-  width: 100%;
-  background: #ffffff;
-  border-radius: 8px;
-  padding: var(--space-2) var(--space-3);
-}
-.text2 {
-  font-size: var(--fs-md);
-  font-weight: 600;
-  color: var(--text-black);
+  gap: var(--space-3);
 }
 
-/* ===== Botão principal ===== */
-.button {
+.profile-edit-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.profile-edit-page__label {
+  font-size: var(--font-size-sm);
+}
+
+.profile-edit-page__value {
   width: 100%;
-  background: #fff;
+  background: var(--color-surface-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.profile-edit-page__value-text {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+.profile-edit-page__submit {
+  width: 100%;
+  background: var(--color-surface-strong);
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: var(--space-3);
-  color: var(--text-black);
-  font-size: var(--fs-md);
+  color: var(--color-text-dark);
+  font-size: var(--font-size-sm);
   font-weight: 700;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
-.button:hover {
+
+.profile-edit-page__submit:hover {
   transform: scale(1.03);
   background: #f0f0f0;
 }
 
-/* ===== Responsividade ===== */
 @media (max-width: 480px) {
-  .column {
+  .profile-edit-page__card {
     padding: var(--space-3);
   }
-  .view {
+
+  .profile-edit-page__value {
     padding: var(--space-2);
-  }
-  .text2 {
-    font-size: var(--fs-sm);
   }
 }
