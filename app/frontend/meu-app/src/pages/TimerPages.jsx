@@ -1,56 +1,40 @@
-import React from "react"
+import React, { useState, useMemo } from "react"
 import "./TimerPages.css"
 import SideBar from "../components/SideBar.jsx"
+import TimerComponent from "../components/TimerComponent.jsx"
 
-function TimerPages() {
+export default function TimerPage() {
+  const [mode, setMode] = useState("idle")
+
+  const backgroundColor = useMemo(() => {
+    if (mode === "focus") return "#c62828"
+    if (mode === "short") return "#1565c0"
+    if (mode === "long") return "#f9a825"
+    return "#222"
+  }, [mode])
+
+  const config = {
+    focusSec: 25 * 60,
+    shortBreakSec: 5 * 60,
+    longBreakSec: 15 * 60,
+    cyclesBeforeLongBreak: 4,
+    autostartNext: true,
+  }
+
   return (
-    <div className="timer-page">
+    <div className="timer-page" style={{ "--dynamic-bg": backgroundColor }}>
       <div className="timer-page__content">
         <div className="timer-page__header">
           <span className="timer-page__title">Cronômetro</span>
         </div>
 
-        <div className="timer-page__main">
-          <div className="timer-page__focus-wrapper">
-            <div className="timer-page__focus-chip">
-              <span className="timer-page__focus-label">FOCO</span>
-            </div>
-          </div>
-
-          <span className="timer-page__time">25:00</span>
-
-          <div className="timer-page__cycles">
-            <span className="timer-page__cycles-label">ciclos restantes:</span>
-            <span className="timer-page__cycles-value">4/4</span>
-          </div>
-
-          <div className="timer-page__footer">
-            <div className="timer-page__icon-column">
-              <img
-                src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/kasngx8a_expires_30_days.png"
-                className="timer-page__icon"
-                alt="Descanso"
-              />
-              <span className="timer-page__icon-label">Descanso</span>
-            </div>
-
-            <div className="timer-page__timer-circle">{/* círculo do timer */}</div>
-
-            <div className="timer-page__icon-column">
-              <img
-                src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/xi4s14y3_expires_30_days.png"
-                className="timer-page__icon"
-                alt="Feito"
-              />
-              <span className="timer-page__icon-label">Feito</span>
-            </div>
-          </div>
-        </div>
+        <TimerComponent
+          {...config}
+          onModeChange={setMode}
+        />
 
         <SideBar />
       </div>
     </div>
   )
 }
-
-export default TimerPages
