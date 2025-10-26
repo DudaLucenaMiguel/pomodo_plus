@@ -1,4 +1,11 @@
-from models.cicloModel import inserir_ciclo, buscar_todos_ciclos, buscar_ciclo_por_id, atualizar_ciclo, excluir_ciclo
+from models.cicloModel import (
+    inserir_ciclo,
+    buscar_todos_ciclos,
+    buscar_ciclos_por_usuario,
+    buscar_ciclo_por_id,
+    atualizar_ciclo,
+    excluir_ciclo,
+)
 
 def criar_ciclo(payload):
     usuario_id = (payload.get("usuario_id") or "").strip()
@@ -15,6 +22,10 @@ def criar_ciclo(payload):
 
 def listar_ciclos():
     dados = buscar_todos_ciclos()
+    return dados, 200
+
+def listar_ciclos_por_usuario(usuario_id):
+    dados = buscar_ciclos_por_usuario(usuario_id)
     return dados, 200
 
 def listar_ciclos_por_id(id):

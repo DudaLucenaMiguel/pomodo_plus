@@ -1,4 +1,11 @@
-from models.sessaoModel import inserir_sessao, buscar_todas_sessoes, buscar_sessao_por_id, atualizar_sessao, excluir_sessao
+from models.sessaoModel import (
+    inserir_sessao,
+    buscar_todas_sessoes,
+    buscar_sessoes_por_usuario,
+    buscar_sessao_por_id,
+    atualizar_sessao,
+    excluir_sessao,
+)
 
 def criar_sessao(payload):
     usuario_id = (payload.get("usuario_id") or "")
@@ -18,6 +25,10 @@ def criar_sessao(payload):
 
 def listar_sessoes():
     dados = buscar_todas_sessoes()
+    return dados, 200
+
+def listar_sessoes_por_usuario(usuario_id):
+    dados = buscar_sessoes_por_usuario(usuario_id)
     return dados, 200
 
 def listar_sessao_por_id(id):

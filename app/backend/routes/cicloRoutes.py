@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from controllers.cicloControllers import (
    criar_ciclo,
    listar_ciclos,
+   listar_ciclos_por_usuario,
    listar_ciclos_por_id,
    editar_ciclo,
    deletar_ciclo
@@ -19,6 +20,12 @@ def post_ciclo():
 @ciclo_bp.route("/ciclo", methods=["GET"])
 def get_ciclo():
     body, status = listar_ciclos()
+    return jsonify(body), status
+
+
+@ciclo_bp.route("/ciclo/usuario/<int:usuario_id>", methods=["GET"])
+def get_ciclo_por_usuario(usuario_id):
+    body, status = listar_ciclos_por_usuario(usuario_id)
     return jsonify(body), status
 
 

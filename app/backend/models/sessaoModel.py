@@ -20,6 +20,14 @@ def buscar_todas_sessoes():
     conn.close()
     return dados
 
+def buscar_sessoes_por_usuario(usuario_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM sessao WHERE usuario_id = ?", (usuario_id,))
+    dados = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return dados
+
 def buscar_sessao_por_id(id):
     conn = get_connection()
     cursor = conn.cursor()

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from controllers.sessaoControllers import (
    criar_sessao,
    listar_sessoes,
+   listar_sessoes_por_usuario,
    listar_sessao_por_id,
    editar_sessao,
    deletar_sessao
@@ -19,6 +20,12 @@ def post_sessao():
 @sessao_bp.route("/sessao", methods=["GET"])
 def get_sessao():
     body, status = listar_sessoes()
+    return jsonify(body), status
+
+
+@sessao_bp.route("/sessao/usuario/<int:usuario_id>", methods=["GET"])
+def get_sessao_por_usuario(usuario_id):
+    body, status = listar_sessoes_por_usuario(usuario_id)
     return jsonify(body), status
 
 
