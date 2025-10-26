@@ -8,7 +8,7 @@ export default function SideBar() {
 
   const navItems = [
     { label: "Histórico", path: "/historico", icon: "calendar_month" },
-    { label: "Cronômetro", path: "/cronometro", icon: "timer" },
+    { label: "Cronômetro", path: "/timer", icon: "timer" },
     { label: "Ciclos", path: "/ciclos", icon: "refresh" },
     { label: "Ajustes", path: "/ajustes", icon: "settings" },
   ];

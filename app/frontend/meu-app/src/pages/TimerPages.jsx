@@ -1,10 +1,32 @@
 import React, { useState, useMemo } from "react"
+import { useLocation } from "react-router-dom"
 import "./TimerPages.css"
 import SideBar from "../components/SideBar.jsx"
 import TimerComponent from "../components/TimerComponent.jsx"
 
 export default function TimerPage() {
+  const { state } = useLocation()
   const [mode, setMode] = useState("idle")
+
+  const defaults = useMemo(
+    () => ({
+      focusSec: 25 * 60,
+      shortBreakSec: 5 * 60,
+      longBreakSec: 15 * 60,
+      cyclesBeforeLongBreak: 4,
+      autostartNext: true,
+    }),
+    []
+  )
+
+  const merged = {
+    focusSec: state?.focusSec ?? defaults.focusSec,
+    shortBreakSec: state?.shortBreakSec ?? defaults.shortBreakSec,
+    longBreakSec: state?.longBreakSec ?? defaults.longBreakSec,
+    cyclesBeforeLongBreak: state?.cyclesBeforeLongBreak ?? defaults.cyclesBeforeLongBreak,
+    autostartNext: defaults.autostartNext,
+    autoStartOnMount: !!state?.autoStartOnMount,
+  }
 
   const backgroundColor = useMemo(() => {
     if (mode === "focus") return "#c62828"
@@ -12,14 +34,6 @@ export default function TimerPage() {
     if (mode === "long") return "#f9a825"
     return "#222"
   }, [mode])
-
-  const config = {
-    focusSec: 25 * 60,
-    shortBreakSec: 5 * 60,
-    longBreakSec: 15 * 60,
-    cyclesBeforeLongBreak: 4,
-    autostartNext: true,
-  }
 
   return (
     <div className="timer-page" style={{ "--dynamic-bg": backgroundColor }}>
@@ -29,8 +43,14 @@ export default function TimerPage() {
         </div>
 
         <TimerComponent
-          {...config}
+          focusSec={merged.focusSec}
+          shortBreakSec={merged.shortBreakSec}
+          longBreakSec={merged.longBreakSec}
+          cyclesBeforeLongBreak={merged.cyclesBeforeLongBreak}
+          autostartNext={merged.autostartNext}
+          autoStartOnMount={merged.autoStartOnMount}
           onModeChange={setMode}
+          onRegisterCycle={(p) => console.log("Registrar ciclo:", p)}
         />
 
         <SideBar />

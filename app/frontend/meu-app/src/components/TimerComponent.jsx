@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import "./TimerComponent.css"
 import { usePomodoroTimer } from "../hooks/usePomodoroTimer"
 
@@ -12,13 +12,18 @@ export default function TimerComponent({
   longBreakSec = 15 * 60,
   cyclesBeforeLongBreak = 4,
   autostartNext = true,
+  autoStartOnMount = false,
   onModeChange,
+  onRegisterCycle,
 }) {
   const {
     mode,
     isRunning,
     remainingSec,
     streak,
+    cycleCount,
+    sessionCount,
+    timeBetweenSessionsMs,
     startFocus,
     startShort,
     startLong,
@@ -26,6 +31,7 @@ export default function TimerComponent({
     resume,
     resetPhase,
     skip,
+    resetToIdle,
   } = usePomodoroTimer({
     focusSec,
     shortBreakSec,
@@ -34,9 +40,18 @@ export default function TimerComponent({
     autostartNext,
   })
 
+  const startedRef = useRef(false)
+
   useEffect(() => {
     if (typeof onModeChange === "function") onModeChange(mode)
   }, [mode, onModeChange])
+
+  useEffect(() => {
+    if (!startedRef.current && autoStartOnMount && mode === "idle") {
+      startedRef.current = true
+      startFocus()
+    }
+  }, [autoStartOnMount, mode, startFocus])
 
   const m = Math.floor(remainingSec / 60)
   const s = remainingSec % 60
@@ -44,7 +59,10 @@ export default function TimerComponent({
     () => (mode === "focus" ? "FOCO" : mode === "idle" ? "PRONTO" : "DESCANSO"),
     [mode]
   )
-  const restantes = useMemo(() => `${Math.max(0, cyclesBeforeLongBreak - streak)}/${cyclesBeforeLongBreak}`, [streak, cyclesBeforeLongBreak])
+  const restantes = useMemo(
+    () => `${Math.max(0, cyclesBeforeLongBreak - streak)}/${cyclesBeforeLongBreak}`,
+    [streak, cyclesBeforeLongBreak]
+  )
   const skipIcon = mode === "focus" ? "coffee" : "book_5"
 
   const handlePrimary = () => {
@@ -54,6 +72,25 @@ export default function TimerComponent({
     if (mode === "short") return remainingSec === shortBreakSec ? startShort() : resume()
     if (mode === "long") return remainingSec === longBreakSec ? startLong() : resume()
   }
+
+  const handleEndCycle = () => {
+    const payload = {
+      timestamp: new Date().toISOString(),
+      mode,
+      focusSec,
+      shortBreakSec,
+      longBreakSec,
+      cyclesBeforeLongBreak,
+      cycleCount,
+      sessionCount,
+      timeBetweenSessionsMs,
+      remainingSec,
+    }
+    if (typeof onRegisterCycle === "function") onRegisterCycle(payload)
+    resetToIdle()
+  }
+
+  const showOnlyPlay = mode === "idle"
 
   return (
     <div className="timer">
@@ -73,19 +110,33 @@ export default function TimerComponent({
       </div>
 
       <div className="timer__footer">
-        <button className="timer__button" type="button" onClick={resetPhase}>
-          <span className="material-symbols-outlined">replay</span>
-        </button>
+        {showOnlyPlay ? (
+          <button className="timer__button" type="button" onClick={handlePrimary}>
+            <span className="material-symbols-outlined">
+              {isRunning ? "pause" : "play_arrow"}
+            </span>
+          </button>
+        ) : (
+          <>
+            <button className="timer__button" type="button" onClick={resetPhase}>
+              <span className="material-symbols-outlined">replay</span>
+            </button>
 
-        <button className="timer__button" type="button" onClick={handlePrimary}>
-          <span className="material-symbols-outlined">
-            {isRunning ? "pause" : "play_arrow"}
-          </span>
-        </button>
+            <button className="timer__button" type="button" onClick={handlePrimary}>
+              <span className="material-symbols-outlined">
+                {isRunning ? "pause" : "play_arrow"}
+              </span>
+            </button>
 
-        <button className="timer__button" type="button" onClick={skip}>
-          <span className="material-symbols-outlined">{skipIcon}</span>
-        </button>
+            <button className="timer__button" type="button" onClick={skip}>
+              <span className="material-symbols-outlined">{skipIcon}</span>
+            </button>
+
+            <button className="timer__button" type="button" onClick={handleEndCycle}>
+              <span className="material-symbols-outlined">task_alt</span>
+            </button>
+          </>
+        )}
       </div>
     </div>
   )

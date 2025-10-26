@@ -31,10 +31,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         {/* Redireciona / para o cronômetro */}
-        <Route path="/" element={<Navigate to="/cronometro" replace />} />
+        <Route path="/" element={<Navigate to="/timer" replace />} />
 
         {/* Rotas principais */}
-        <Route path="/cronometro" element={<TimerPages />} />
+        <Route path="/timer" element={<TimerPages />} />
         <Route path="/ciclos" element={<CiclosPages />} />
         <Route path="/historico" element={<HistoricoPages />} />
         <Route path="/ajustes" element={<AjustesPages />} />
