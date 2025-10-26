@@ -1,8 +1,8 @@
 :root {
   --app-font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --app-min-width: 320px;
+  --app-min-width: 393px;
   --app-max-width: 1440px;
-  --app-min-height: 100dvh;
+  --app-min-height: 682px;
 }
 
 html,
