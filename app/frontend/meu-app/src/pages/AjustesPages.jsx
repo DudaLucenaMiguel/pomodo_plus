@@ -1,23 +1,38 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { useNavigate } from "react-router-dom"
 import "./AjustesPages.css"
 import SideBar from "../components/SideBar"
+import { useUsuario } from "../hooks/useUsuarios"
+
+function getCurrentUserId() {
+  if (typeof window === "undefined") return 1
+  const stored = window.localStorage.getItem("auth_user_id")
+  const parsed = Number(stored)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1
+}
 
 function AjustesPages() {
   const navigate = useNavigate()
+  const userId = getCurrentUserId()
+  const { data: usuario, loading, error } = useUsuario(userId)
 
-  const perfilSimulado = useMemo(
-    () => ({
-      name: "Fulano",
-      email: "fulano@email.com",
-      avatar: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
-      banner: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
-    }),
-    []
-  )
+  const name = usuario?.nome ?? "Usuário"
+  const email = usuario?.email ?? ""
+  const avatar =
+    usuario?.avatar ??
+    "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png"
 
   const handleEditarPerfil = () => {
-    navigate("/ajustes/editar-perfil", { state: perfilSimulado })
+    navigate("/ajustes/editar-perfil", {
+      state: {
+        usuario: {
+          id: usuario?.id ?? userId,
+          nome: name,
+          email,
+          avatar,
+        },
+      },
+    })
   }
 
   const handleSignOut = () => {
@@ -33,9 +48,13 @@ function AjustesPages() {
         </div>
         <div className="settings-page__card">
           <div className="settings-page__profile">
-            <img src={perfilSimulado.avatar} className="settings-page__avatar" alt="Avatar" />
+            <img src={avatar} className="settings-page__avatar" alt="Avatar" />
             <span className="settings-page__greeting">
-              Olá, {perfilSimulado.name}, seja bem-vindo(a) às configurações do Pomodoro+
+              {loading
+                ? "Carregando informações do perfil..."
+                : error
+                  ? "Não foi possível carregar seu perfil."
+                  : `Olá, ${name}, seja bem-vindo(a) às configurações do Pomodoro+`}
             </span>
           </div>
           <div className="settings-page__actions">

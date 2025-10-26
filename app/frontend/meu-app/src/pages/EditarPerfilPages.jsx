@@ -1,39 +1,56 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import SideBar from "../components/SideBar"
 import "./EditarPerfilPages.css"
+import { useUsuario } from "../hooks/useUsuarios"
+import { UsuariosService } from "../services/api.service"
+
+function getCurrentUserId() {
+  if (typeof window === "undefined") return 1
+  const stored = window.localStorage.getItem("auth_user_id")
+  const parsed = Number(stored)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1
+}
 
 function EditarPerfilPages() {
   const { state } = useLocation()
   const navigate = useNavigate()
+  const stateUsuario = state?.usuario || state || null
+  const fallbackId = stateUsuario?.id ?? stateUsuario?.usuarioId ?? getCurrentUserId()
+  const { data: usuario, loading, error } = useUsuario(fallbackId)
 
-  const defaults = useMemo(
-    () => ({
-      name: "Fulano",
-      email: "fulano@email.com",
-      avatar: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
-      banner: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
-    }),
-    []
+  const effectiveUser = useMemo(
+    () => usuario ?? stateUsuario ?? null,
+    [usuario, stateUsuario]
   )
 
-  const initial = {
-    name: state?.name ?? defaults.name,
-    email: state?.email ?? defaults.email,
-    avatar: state?.avatar ?? defaults.avatar,
-    banner: state?.banner ?? defaults.banner,
-  }
+  const [name, setName] = useState(effectiveUser?.nome ?? effectiveUser?.name ?? "")
+  const [email, setEmail] = useState(effectiveUser?.email ?? "")
+  const [saving, setSaving] = useState(false)
 
-  const [name, setName] = useState(initial.name)
-  const [email, setEmail] = useState(initial.email)
+  useEffect(() => {
+    if (!effectiveUser) return
+    setName(effectiveUser?.nome ?? effectiveUser?.name ?? "")
+    setEmail(effectiveUser?.email ?? "")
+  }, [effectiveUser])
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const payload = {
-      name: String(name || "").trim(),
+      nome: String(name || "").trim(),
       email: String(email || "").trim(),
     }
-    console.log("Salvar perfil (simulado):", payload)
-    navigate(-1)
+
+    if (!payload.nome || !payload.email) return
+
+    try {
+      setSaving(true)
+      await UsuariosService.update(fallbackId, payload)
+      navigate(-1)
+    } catch (err) {
+      console.error("Erro ao atualizar perfil:", err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -54,6 +71,14 @@ function EditarPerfilPages() {
         </header>
         <div className="profile-edit-page__card">
           <div className="profile-edit-page__fields">
+            {loading && (
+              <p className="profile-edit-page__message">Carregando dados...</p>
+            )}
+            {error && (
+              <p className="profile-edit-page__message profile-edit-page__message--error">
+                {error}
+              </p>
+            )}
             <div className="profile-edit-page__field">
               <span className="profile-edit-page__label">Nome</span>
               <div className="profile-edit-page__value">
@@ -83,8 +108,12 @@ function EditarPerfilPages() {
             </div>
           </div>
 
-          <button className="profile-edit-page__submit" onClick={handleSave}>
-            Salvar informações
+          <button
+            className="profile-edit-page__submit"
+            onClick={handleSave}
+            disabled={saving || loading}
+          >
+            {saving ? "Salvando..." : "Salvar informações"}
           </button>
         </div>
 
