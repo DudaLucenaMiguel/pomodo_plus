@@ -1,6 +1,6 @@
-import React from "react"
-import "./AjustesPages.css"
-import SideBar from "../components/SideBar"
+import React from "react";
+import "./AjustesPages.css";
+import SideBar from "../components/SideBar";
 
 function AjustesPages() {
   return (
@@ -30,7 +30,9 @@ function AjustesPages() {
               />
             </div>
             <div className="settings-page__action">
-              <span className="settings-page__action-label">Assuntos e Temas</span>
+              <span className="settings-page__action-label">
+                Assuntos e Temas
+              </span>
               <img
                 src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/ftu2i6mf_expires_30_days.png"
                 className="settings-page__action-icon"
@@ -38,14 +40,17 @@ function AjustesPages() {
               />
             </div>
           </div>
-          <button className="settings-page__signout" onClick={() => alert("Pressed!")}>
+          <button
+            className="settings-page__signout"
+            onClick={() => alert("Pressed!")}
+          >
             SAIR DA CONTA
           </button>
         </div>
         <SideBar />
       </div>
     </div>
-  )
+  );
 }
 
-export default AjustesPages
+export default AjustesPages;
