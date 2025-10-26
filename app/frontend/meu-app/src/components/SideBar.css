@@ -1,95 +1,61 @@
-/* ===== Tokens mínimos (seguro mesmo sem theme.css) ===== */
-:root{
-  --space-1: clamp(2px, 0.3vw, 4px);
-  --space-2: clamp(4px, 0.6vw, 8px);
-  --space-3: clamp(8px, 0.9vw, 12px);
-  --space-4: clamp(12px, 1.2vw, 16px);
-  --radius: 10px;
-
-  --surface: #ffffff1a;     /* fundo translúcido da barra */
-  --chip: #fff;             /* fundo do item ativo */
-  --text-dark: #000;
-  --text-light: #fff;
-}
-
-/* ===== Contêiner da barra ===== */
-.row-view3{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
+.sidebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-3);
-  background: var(--surface);
-  border-radius: var(--radius);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
   width: min(100%, 880px);
   margin-inline: auto;
 }
 
-/* ===== Item “botão” (compatível com <button> ou <NavLink>) ===== */
-.button-column,
-.icon-group{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.sidebar__button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-1);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   text-decoration: none;
   border: none;
   background: transparent;
   padding: var(--space-2);
   cursor: pointer;
-  transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease;
+  color: var(--color-text-light);
+  transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Inativo (texto claro sobre fundo translúcido) */
-.icon-group .text7,
-.icon-group .text6 { color: var(--text-light); }
-
-/* Ativo (chip branco, texto escuro) */
-.button-column{
-  background: var(--chip);
-}
-.button-column .text6,
-.button-column .text7{ color: var(--text-dark); }
-
-/* Hover/Focus */
-.button-column:hover,
-.icon-group:hover{
+.sidebar__button:hover,
+.sidebar__button:focus-visible {
   transform: scale(1.05);
 }
-.button-column:focus-visible,
-.icon-group:focus-visible{
-  outline: 3px solid rgba(255,255,255,.6);
+
+.sidebar__button:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
   outline-offset: 2px;
 }
 
-/* ===== Ícone ===== */
-.image2{
-  border-radius: var(--radius);
+.sidebar__icon {
+  border-radius: var(--radius-md);
   width: clamp(32px, 6vw, 48px);
   aspect-ratio: 1;
   object-fit: cover;
 }
 
-/* ===== Rótulo ===== */
-.text6, .text7, .text8{
+.sidebar__label {
   font-weight: 700;
-  font-size: clamp(10px, 1vw, 13px);
+  font-size: var(--font-size-xs);
   line-height: 1.1;
   text-align: center;
 }
 
-/* ===== Estados “ativo” automáticos p/ NavLink ===== */
-/* Quando usar <NavLink className={({isActive}) => isActive ? "button-column" : "icon-group"}> */
-a.button-column[aria-current="page"]{
-  background: var(--chip);
-}
-a.button-column[aria-current="page"] .text6,
-a.button-column[aria-current="page"] .text7{ color: var(--text-dark); }
+@media (max-width: 480px) {
+  .sidebar {
+    justify-content: space-around;
+  }
 
-/* ===== Responsividade extra ===== */
-@media (max-width: 480px){
-  .row-view3{ justify-content: space-around; }
-  .image2{ width: clamp(28px, 10vw, 42px); }
+  .sidebar__icon {
+    width: clamp(28px, 10vw, 42px);
+  }
 }
