@@ -1,48 +1,31 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-import TimerPages from "./pages/TimerPages.jsx";
-import CiclosPages from "./pages/CiclosPages.jsx";
-import HistoricoPages from "./pages/HistoricoPages.jsx";
-import AjustesPages from "./pages/AjustesPages.jsx";
-import EditarPerfilPages from "./pages/EditarPerfilPages.jsx";
-
-function NotFound() {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center",
-        color: "#fff",
-        background: "#000",
-        textAlign: "center",
-      }}
-    >
-      <div>
-        <h1>404</h1>
-        <p>Página não encontrada</p>
-      </div>
-    </div>
-  );
-}
+import React from "react"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import LoginPage from "./pages/LoginPages"
+import CadastroPages from "./pages/CadastroPages"
+import TimerPage from "./pages/TimerPages"
+import CiclosPages from "./pages/CiclosPages"
+import AjustesPages from "./pages/AjustesPages"
+import EditarPerfilPages from "./pages/EditarPerfilPages"
+import HistoricoPages from "./pages/HistoricoPages"
+import ProtectedRoute from "./routes/ProtectedRoute"
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        {/* Redireciona / para o cronômetro */}
-        <Route path="/" element={<Navigate to="/timer" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/cadastro" element={<CadastroPages />} />
 
-        {/* Rotas principais */}
-        <Route path="/timer" element={<TimerPages />} />
-        <Route path="/ciclos" element={<CiclosPages />} />
-        <Route path="/historico" element={<HistoricoPages />} />
-        <Route path="/ajustes" element={<AjustesPages />} />
-        <Route path="/ajustes/editar-perfil" element={<EditarPerfilPages />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/timer" element={<TimerPage />} />
+          <Route path="/ciclos" element={<CiclosPages />} />
+          <Route path="/ajustes" element={<AjustesPages />} />
+          <Route path="/ajustes/editar-perfil" element={<EditarPerfilPages />} />
+          <Route path="/historico" element={<HistoricoPages />} />
+        </Route>
 
-        {/* 404 */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-    </BrowserRouter>
-  );
+    </Router>
+  )
 }

@@ -36,6 +36,7 @@
   padding: var(--space-4);
   background: var(--color-surface);
   border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
 }
 
 .settings-page__profile {
@@ -67,20 +68,41 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--color-surface);
+  background: color-mix(in oklab, var(--color-surface) 85%, #000 15%);
   border-radius: var(--radius-pill);
   padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  text-align: left;
+}
+
+.settings-page__action:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--color-surface) 92%, #000 8%);
+  border-color: color-mix(in oklab, #fff 24%, transparent);
+}
+
+.settings-page__action:active {
+  transform: translateY(0);
+}
+
+.settings-page__action:focus-visible {
+  outline: 3px solid color-mix(in oklab, #fff 35%, transparent);
+  outline-offset: 2px;
 }
 
 .settings-page__action-label {
   font-size: var(--font-size-sm);
-  font-weight: 500;
+  font-weight: 600;
+  color:#fff
 }
 
 .settings-page__action-icon {
   width: clamp(18px, 2vw, 24px);
   aspect-ratio: 1;
   object-fit: contain;
+  opacity: 0.9;
 }
 
 .settings-page__signout {
@@ -92,11 +114,12 @@
   font-weight: 700;
   color: var(--color-text-light);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .settings-page__signout:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  filter: brightness(1.05);
 }
 
 @media (max-width: 480px) {

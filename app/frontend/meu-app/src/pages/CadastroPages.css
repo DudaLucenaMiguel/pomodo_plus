@@ -1,0 +1,131 @@
+.signup-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: var(--color-text-dark, #0f0f10);
+  color: var(--color-text-light, #f5f5f5);
+  padding: var(--space-6, 24px) var(--space-4, 16px);
+}
+
+.signup-page__card {
+  width: min(100%, 420px);
+  background: var(--color-surface, #1e1e1e);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
+  border-radius: var(--radius-lg, 16px);
+  padding: clamp(16px, 4vw, 24px);
+  display: grid;
+  gap: clamp(14px, 2.5vw, 18px);
+}
+
+.signup-page__header {
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+
+.signup-page__logo {
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+.signup-page__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.signup-page__subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.signup-page__form {
+  display: grid;
+  gap: 12px;
+}
+
+.signup-page__field {
+  display: grid;
+  gap: 6px;
+}
+
+.signup-page__label {
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.signup-page__input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in oklab, #fff 20%, transparent);
+  background: #ffffff;
+  color: #111111;
+  padding: 0 12px;
+  font-size: 0.95rem;
+}
+
+.signup-page__input::placeholder {
+  color: #666;
+}
+
+.signup-page__input:focus {
+  outline: 3px solid color-mix(in oklab, #4da3ff 45%, transparent);
+  outline-offset: 2px;
+}
+
+.signup-page__error {
+  background: color-mix(in oklab, #ff1744 20%, transparent);
+  border: 1px solid color-mix(in oklab, #ff1744 45%, transparent);
+  color: #ffd7dc;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.signup-page__submit {
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in oklab, #fff 15%, transparent);
+  background: #f0f0f0;
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.signup-page__submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #ffffff;
+  border-color: color-mix(in oklab, #fff 30%, transparent);
+}
+
+.signup-page__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.signup-page__footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  font-size: 0.95rem;
+  margin-top: -4px;
+}
+
+.signup-page__link-btn {
+  background: none;
+  border: none;
+  color: #97c7ff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.signup-page__link-btn:hover {
+  text-decoration: underline;
+}

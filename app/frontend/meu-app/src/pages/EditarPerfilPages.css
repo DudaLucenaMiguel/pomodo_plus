@@ -1,90 +1,163 @@
 .profile-edit-page {
   display: flex;
   flex-direction: column;
-  background: var(--color-text-dark);
-  color: var(--color-text-light);
+  background: var(--color-text-dark, #0f0f10);
+  color: var(--color-text-light, #f5f5f5);
   min-height: 100dvh;
-  padding: var(--space-4);
+  padding: var(--space-4, 16px);
 }
 
 .profile-edit-page__content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-4, 16px);
+  width: 100%;
+}
+
+/* Cabeçalho com título e botão voltar */
+.profile-edit-page__header {
+  width: min(100%, 880px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface, #1e1e1e);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
+  border-radius: var(--radius-md, 12px);
+  padding: 10px 12px;
+}
+
+.profile-edit-page__back {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  background: color-mix(in oklab, #ffffff 6%, transparent);
+  color: inherit;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.profile-edit-page__back:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, #ffffff 12%, transparent);
+  border-color: color-mix(in oklab, #fff 24%, transparent);
+}
+
+.profile-edit-page__title {
+  font-size: var(--font-size-md, 1.125rem);
+  font-weight: 700;
+  text-align: center;
+}
+
+.profile-edit-page__spacer {
+  width: 36px;
+  height: 36px;
 }
 
 .profile-edit-page__banner {
   width: 100%;
   max-width: 880px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 12px);
   object-fit: cover;
+  aspect-ratio: 16 / 5;
 }
 
 .profile-edit-page__card {
   width: min(100%, 880px);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
+  gap: var(--space-4, 16px);
+  background: var(--color-surface, #1e1e1e);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-4, 16px);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
 }
 
+/* Labels e contêiner dos inputs */
 .profile-edit-page__fields {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-3, 12px);
 }
 
 .profile-edit-page__field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-1, 6px);
 }
 
 .profile-edit-page__label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm, 0.95rem);
+  opacity: 0.95;
 }
 
 .profile-edit-page__value {
   width: 100%;
-  background: var(--color-surface-strong);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-strong, #2a2a2a);
+  border-radius: var(--radius-sm, 8px);
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
 }
 
-.profile-edit-page__value-text {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-text-dark);
+/* Inputs editáveis com contraste garantido */
+.profile-edit-page__input {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, #fff 20%, transparent);
+  background: #ffffff;
+  color: #111111;
+  padding: 0 12px;
+  font-size: var(--font-size-sm, 0.95rem);
+  line-height: 40px;
 }
 
+.profile-edit-page__input::placeholder {
+  color: #666;
+}
+
+.profile-edit-page__input:focus {
+  outline: 3px solid color-mix(in oklab, #4da3ff 45%, transparent);
+  outline-offset: 2px;
+}
+
+/* Botão de salvar */
 .profile-edit-page__submit {
   width: 100%;
-  background: var(--color-surface-strong);
-  border: none;
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-  color: var(--color-text-dark);
-  font-size: var(--font-size-sm);
+  background: var(--color-surface-strong, #2a2a2a);
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-3, 12px);
+  color: #000; /* 🔹 Texto preto fixo */
+  font-size: var(--font-size-sm, 0.95rem);
   font-weight: 700;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .profile-edit-page__submit:hover {
-  transform: scale(1.03);
-  background: #f0f0f0;
+  transform: translateY(-1px);
+  background: color-mix(in oklab, #ffffff 20%, #2a2a2a);
+  border-color: color-mix(in oklab, #fff 24%, transparent);
+  color: #fff;
 }
+
+.profile-edit-page__submit:active {
+  transform: translateY(0);
+  color: #000000; /* 🔹 Mantém preto ao clicar */
+}
+
 
 @media (max-width: 480px) {
   .profile-edit-page__card {
-    padding: var(--space-3);
+    padding: var(--space-3, 12px);
   }
-
   .profile-edit-page__value {
-    padding: var(--space-2);
+    padding: var(--space-2, 8px);
   }
 }
