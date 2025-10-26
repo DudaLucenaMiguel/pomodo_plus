@@ -3,7 +3,6 @@
   flex-direction: column;
   background: var(--color-text-dark);
   color: var(--color-text-light);
-  min-height: 100dvh;
   padding: var(--space-4);
 }
 

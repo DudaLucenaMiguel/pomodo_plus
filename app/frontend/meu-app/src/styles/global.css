@@ -1,0 +1,30 @@
+:root {
+  --app-font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --app-min-width: 320px;
+  --app-max-width: 1440px;
+  --app-min-height: 100dvh;
+}
+
+html,
+body {
+  min-height: var(--app-min-height);
+}
+
+body {
+  margin: 0;
+  font-family: var(--app-font-family);
+  min-width: var(--app-min-width);
+  background-color: var(--color-text-dark);
+  color: var(--color-text-light);
+}
+
+#root {
+  min-height: var(--app-min-height);
+}
+
+[class$="-page"] {
+  min-height: var(--app-min-height);
+  min-width: var(--app-min-width);
+  max-width: var(--app-max-width);
+  width: 100%;
+}
