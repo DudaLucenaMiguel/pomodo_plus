@@ -13,7 +13,13 @@ api.interceptors.response.use(
   (err) => {
     const status = err?.response?.status ?? 0;
     const data = err?.response?.data;
-    const message = data?.message || data?.detail || err?.message || "Erro de rede";
+    const message =
+      data?.mensagem ||
+      data?.erro ||
+      data?.message ||
+      data?.detail ||
+      err?.message ||
+      "Erro de rede";
     return Promise.reject({ status, message, raw: err });
   }
 );
