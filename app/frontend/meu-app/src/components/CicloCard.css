@@ -54,6 +54,12 @@
   border-color: color-mix(in oklab, #fff 24%, transparent);
 }
 
+.ciclo-card__icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .ciclo-card__icon-btn--danger {
   border-color: color-mix(in oklab, #ff1744 30%, transparent);
   background: color-mix(in oklab, #ff1744 12%, transparent);
@@ -133,6 +139,12 @@
 
 .ciclo-card__start-button:active {
   transform: translateY(0);
+}
+
+.ciclo-card__start-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .ciclo-card__start-button--confirm {
