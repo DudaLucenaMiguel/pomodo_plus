@@ -1,0 +1,42 @@
+:root {
+  /* Espaçamentos fluidos */
+  --space-1: clamp(2px, 0.3vw, 4px);
+  --space-2: clamp(4px, 0.6vw, 8px);
+  --space-3: clamp(8px, 0.9vw, 12px);
+  --space-4: clamp(12px, 1.2vw, 16px);
+  --space-5: clamp(16px, 1.6vw, 24px);
+  --space-6: clamp(24px, 2.4vw, 36px);
+
+  /* Raios padrão */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+
+  /* Escala tipográfica */
+  --font-size-xs: clamp(10px, 1vw, 12px);
+  --font-size-sm: clamp(12px, 1.2vw, 16px);
+  --font-size-md: clamp(14px, 1.4vw, 18px);
+  --font-size-lg: clamp(18px, 2vw, 24px);
+  --font-size-xl: clamp(22px, 2.4vw, 28px);
+  --font-size-xxl: clamp(40px, 8vw, 96px);
+
+  /* Paleta de cores */
+  --color-brand: #ff0000;
+  --color-brand-strong: #ff4a4a;
+  --color-surface: #ffffff1a;
+  --color-surface-strong: #ffffff;
+  --color-text-dark: #000000;
+  --color-text-light: #ffffff;
+  --color-ink: #00000080;
+  --color-overlay: #ffffff80;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
