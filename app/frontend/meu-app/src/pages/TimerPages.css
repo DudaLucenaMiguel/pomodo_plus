@@ -29,3 +29,19 @@
   font-weight: 700;
   text-align: center;
 }
+
+.timer-page__status {
+  width: min(100%, 880px);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklab, var(--color-surface) 90%, transparent);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--color-text-light);
+  border: 1px solid color-mix(in oklab, #fff 14%, transparent);
+}
+
+.timer-page__status--error {
+  border-color: color-mix(in oklab, #ff6b6b 40%, transparent);
+  color: #ffb4a2;
+}

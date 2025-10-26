@@ -36,3 +36,19 @@
   gap: var(--space-4);
   align-items: start;
 }
+
+.cycles-page__message {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: var(--space-3);
+  text-align: center;
+  background: color-mix(in oklab, var(--color-surface) 85%, transparent);
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  color: var(--color-text-light);
+}
+
+.cycles-page__message--error {
+  border-color: color-mix(in oklab, #ff6b6b 40%, transparent);
+  color: #ffb4a2;
+}
