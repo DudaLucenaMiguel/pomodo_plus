@@ -24,6 +24,10 @@ export default function TimerComponent({
     cycleCount,
     sessionCount,
     timeBetweenSessionsMs,
+    elapsedFocusSec,
+    elapsedShortSec,
+    elapsedLongSec,
+    elapsedTotalSec,
     startFocus,
     startShort,
     startLong,
@@ -85,6 +89,12 @@ export default function TimerComponent({
       sessionCount,
       timeBetweenSessionsMs,
       remainingSec,
+      elapsed: {
+        focusSec: elapsedFocusSec,
+        shortBreakSec: elapsedShortSec,
+        longBreakSec: elapsedLongSec,
+        totalSec: elapsedTotalSec,
+      },
     }
     if (typeof onRegisterCycle === "function") onRegisterCycle(payload)
     resetToIdle()

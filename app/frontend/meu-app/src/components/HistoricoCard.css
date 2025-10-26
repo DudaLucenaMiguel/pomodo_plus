@@ -1,67 +1,89 @@
 .history-card {
-  width: min(100%, 880px);
-  display: flex;
+  background: var(--color-surface, #1e1e1e);
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-3, 12px);
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--space-3, 12px);
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
+}
+
+.history-card__left {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3, 12px);
+  align-items: center;
+  cursor: pointer;
 }
 
 .history-card__icon {
-  width: clamp(40px, 6vw, 60px);
-  aspect-ratio: 1;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
+  width: 40px;
+  height: 40px;
 }
 
 .history-card__info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  display: grid;
+  gap: 4px;
 }
 
 .history-card__date {
-  font-size: var(--font-size-xs);
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 .history-card__title {
-  font-size: var(--font-size-md);
   font-weight: 700;
 }
 
 .history-card__details {
-  display: flex;
+  display: inline-grid;
+  grid-auto-flow: column;
   align-items: center;
-  gap: var(--space-1);
+  gap: 6px;
+  opacity: 0.95;
 }
 
 .history-card__details-icon {
-  width: clamp(12px, 2vw, 16px);
-  aspect-ratio: 1;
-  object-fit: contain;
+  width: 16px;
+  height: 16px;
 }
 
 .history-card__time {
-  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
 }
 
 .history-card__status {
-  width: clamp(30px, 5vw, 40px);
-  aspect-ratio: 1;
-  background: #ffa1a1;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
+  justify-self: center;
 }
 
-@media (max-width: 480px) {
-  .history-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.history-card__status--ok {
+  background: #00e676;
+}
 
-  .history-card__status {
-    align-self: center;
-  }
+.history-card__status--aborted {
+  background: #ff1744;
+}
+
+.history-card__delete-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  background: color-mix(in oklab, #ffffff 6%, transparent);
+  color: var(--color-text-light, #f5f5f5);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.history-card__delete-btn:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, #ffffff 12%, transparent);
+  border-color: color-mix(in oklab, #fff 24%, transparent);
 }

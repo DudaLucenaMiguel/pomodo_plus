@@ -1,29 +1,76 @@
 import React from "react"
 import "./HistoricoCard.css"
 
-function HistoricoCard() {
+function fmtDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString("pt-BR")
+  } catch {
+    return "—"
+  }
+}
+
+function pad(n) {
+  return String(n).padStart(2, "0")
+}
+
+function fmtDuration(sec) {
+  const h = Math.floor(sec / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = sec % 60
+  return `${pad(h)}:${pad(m)}:${pad(s)}`
+}
+
+export default function HistoricoCard({
+  id,
+  dateISO,
+  title,
+  durationSec,
+  status = "completed",
+  onDelete,
+  onOpen,
+}) {
+  const handleDelete = () => {
+    if (typeof onDelete === "function") onDelete(id)
+  }
+  const handleOpen = () => {
+    if (typeof onOpen === "function") onOpen(id)
+  }
+  const statusClass =
+    status === "completed" ? "history-card__status--ok" : "history-card__status--aborted"
+
   return (
     <div className="history-card">
-      <img
-        src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/2qi72d81_expires_30_days.png"
-        className="history-card__icon"
-        alt="Ícone do histórico"
-      />
-      <div className="history-card__info">
-        <span className="history-card__date">00/00/0000</span>
-        <span className="history-card__title">Assunto - Tema</span>
-        <div className="history-card__details">
-          <img
-            src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/y1qwqs4r_expires_30_days.png"
-            className="history-card__details-icon"
-            alt="Ícone de tempo"
-          />
-          <span className="history-card__time">00:00:00</span>
+      <div className="history-card__left" onClick={handleOpen} role="button" tabIndex={0}>
+        <img
+          src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/2qi72d81_expires_30_days.png"
+          className="history-card__icon"
+          alt="Histórico"
+        />
+        <div className="history-card__info">
+          <span className="history-card__date">{fmtDate(dateISO)}</span>
+          <span className="history-card__title">{title}</span>
+          <div className="history-card__details">
+            <img
+              src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/y1qwqs4r_expires_30_days.png"
+              className="history-card__details-icon"
+              alt="Tempo"
+            />
+            <span className="history-card__time">{fmtDuration(durationSec)}</span>
+          </div>
         </div>
       </div>
-      <div className="history-card__status" />
+
+      <div className={`history-card__status ${statusClass}`} />
+
+      <button
+        className="history-card__delete-btn"
+        type="button"
+        aria-label="Deletar"
+        onClick={handleDelete}
+        title="Deletar sessão"
+      >
+        <span className="material-symbols-outlined">delete</span>
+      </button>
     </div>
   )
 }
-
-export default HistoricoCard
