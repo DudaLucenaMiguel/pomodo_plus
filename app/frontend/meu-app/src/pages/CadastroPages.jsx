@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCadastro } from "../hooks/useAuth";
 import "./CadastroPages.css";
 
 function isEmail(v) {
@@ -13,6 +14,7 @@ function CadastroPages() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const cadastro = useCadastro();
 
   const isValid = useMemo(
     () =>
@@ -28,13 +30,19 @@ function CadastroPages() {
     setSubmitting(true);
     setError("");
     try {
-      const payload = { name: name.trim(), email: email.trim() };
-      console.log("Cadastro simulado:", payload);
-      setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 400);
+      const payload = {
+        nome: name.trim(),
+        email: email.trim().toLowerCase(),
+        senha: password,
+      };
+      const { promise } = cadastro(payload);
+      await promise;
+      navigate("/login", { replace: true });
     } catch (err) {
-      setError("Não foi possível criar sua conta. Tente novamente.");
+      const message =
+        err?.raw?.response?.data?.erro || err?.message ||
+        "Não foi possível criar sua conta. Tente novamente.";
+      setError(message);
     } finally {
       setSubmitting(false);
     }
