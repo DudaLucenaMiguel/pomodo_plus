@@ -1,23 +1,27 @@
-import React, { useMemo } from "react"
+import React from "react"
 import { useNavigate } from "react-router-dom"
 import "./AjustesPages.css"
 import SideBar from "../components/SideBar"
+import { useCurrentUsuario } from "../hooks/useAuthUser"
+
+function buildAvatar(nome, email) {
+  const seed = nome || email || "Pomodoro"
+  const encoded = encodeURIComponent(seed)
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${encoded}`
+}
 
 function AjustesPages() {
   const navigate = useNavigate()
+  const { usuario, loading, error } = useCurrentUsuario()
 
-  const perfilSimulado = useMemo(
-    () => ({
-      name: "Fulano",
-      email: "fulano@email.com",
-      avatar: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
-      banner: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
-    }),
-    []
-  )
+  const nome = usuario?.nome ?? "Usuário"
+  const email = usuario?.email ?? ""
+  const avatar = buildAvatar(nome, email)
+  const banner = "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png"
 
   const handleEditarPerfil = () => {
-    navigate("/ajustes/editar-perfil", { state: perfilSimulado })
+    if (!usuario) return
+    navigate("/ajustes/editar-perfil", { state: { usuarioId: usuario.id } })
   }
 
   const handleSignOut = () => {
@@ -32,22 +36,34 @@ function AjustesPages() {
           <span className="settings-page__title">Ajustes</span>
         </div>
         <div className="settings-page__card">
-          <div className="settings-page__profile">
-            <img src={perfilSimulado.avatar} className="settings-page__avatar" alt="Avatar" />
-            <span className="settings-page__greeting">
-              Olá, {perfilSimulado.name}, seja bem-vindo(a) às configurações do Pomodoro+
-            </span>
-          </div>
-          <div className="settings-page__actions">
-            <button className="settings-page__action" onClick={handleEditarPerfil}>
-              <span className="settings-page__action-label">Editar Perfil</span>
-              <img
-                src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/j9ft02jr_expires_30_days.png"
-                className="settings-page__action-icon"
-                alt="Editar perfil"
-              />
-            </button>
-          </div>
+          {loading ? (
+            <div className="settings-page__loading">Carregando informações do usuário...</div>
+          ) : error ? (
+            <div className="settings-page__error">{error}</div>
+          ) : (
+            <>
+              <div className="settings-page__profile">
+                <img src={avatar} className="settings-page__avatar" alt="Avatar" />
+                <span className="settings-page__greeting">
+                  Olá, {nome}, seja bem-vindo(a) às configurações do Pomodoro+
+                </span>
+              </div>
+              <div className="settings-page__details">{email}</div>
+              <div className="settings-page__banner">
+                <img src={banner} alt="Banner" />
+              </div>
+              <div className="settings-page__actions">
+                <button className="settings-page__action" onClick={handleEditarPerfil} disabled={!usuario}>
+                  <span className="settings-page__action-label">Editar Perfil</span>
+                  <img
+                    src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/j9ft02jr_expires_30_days.png"
+                    className="settings-page__action-icon"
+                    alt="Editar perfil"
+                  />
+                </button>
+              </div>
+            </>
+          )}
           <button className="settings-page__signout" onClick={handleSignOut}>
             SAIR DA CONTA
           </button>

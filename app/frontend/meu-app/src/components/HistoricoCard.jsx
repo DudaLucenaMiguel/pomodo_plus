@@ -28,19 +28,29 @@ export default function HistoricoCard({
   status = "completed",
   onDelete,
   onOpen,
+  disabled = false,
 }) {
+  const isDisabled = Boolean(disabled)
   const handleDelete = () => {
+    if (isDisabled) return
     if (typeof onDelete === "function") onDelete(id)
   }
   const handleOpen = () => {
+    if (isDisabled) return
     if (typeof onOpen === "function") onOpen(id)
   }
   const statusClass =
     status === "completed" ? "history-card__status--ok" : "history-card__status--aborted"
 
   return (
-    <div className="history-card">
-      <div className="history-card__left" onClick={handleOpen} role="button" tabIndex={0}>
+    <div className={`history-card${isDisabled ? " history-card--disabled" : ""}`}>
+      <div
+        className="history-card__left"
+        onClick={handleOpen}
+        role="button"
+        tabIndex={0}
+        aria-disabled={isDisabled}
+      >
         <img
           src="https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/2qi72d81_expires_30_days.png"
           className="history-card__icon"
@@ -68,6 +78,7 @@ export default function HistoricoCard({
         aria-label="Deletar"
         onClick={handleDelete}
         title="Deletar sessão"
+        disabled={isDisabled}
       >
         <span className="material-symbols-outlined">delete</span>
       </button>

@@ -15,6 +15,7 @@ export default function CicloCard({
   onStart,
   onUpdate,
   onDelete,
+  disabled = false,
 }) {
   const [editing, setEditing] = useState(false)
   const [formName, setFormName] = useState(name)
@@ -23,13 +24,17 @@ export default function CicloCard({
   const [formLong, setFormLong] = useState(mm(longBreakSec))
   const [formCycles, setFormCycles] = useState(cyclesBeforeLongBreak)
 
+  const isDisabled = Boolean(disabled)
+
   const handleStart = () => {
+    if (isDisabled) return
     if (typeof onStart === "function") {
       onStart({ id, name, focusSec, shortBreakSec, longBreakSec, cyclesBeforeLongBreak })
     }
   }
 
   const handleEdit = () => {
+    if (isDisabled) return
     setEditing(true)
     setFormName(name)
     setFormFocus(mm(focusSec))
@@ -39,6 +44,7 @@ export default function CicloCard({
   }
 
   const handleSaveSingle = () => {
+    if (isDisabled) return
     const newName = String(formName || "").trim()
     const payload = {
       id,
@@ -62,6 +68,7 @@ export default function CicloCard({
   }
 
   const handleDelete = () => {
+    if (isDisabled) return
     if (typeof onDelete === "function") onDelete(id)
   }
 
@@ -91,11 +98,21 @@ export default function CicloCard({
 
         <div className="ciclo-card__icons">
           {!editing && (
-            <button className="ciclo-card__icon-btn" aria-label="Editar" onClick={handleEdit}>
+            <button
+              className="ciclo-card__icon-btn"
+              aria-label="Editar"
+              onClick={handleEdit}
+              disabled={isDisabled}
+            >
               <span className="material-symbols-outlined">edit</span>
             </button>
           )}
-          <button className="ciclo-card__icon-btn ciclo-card__icon-btn--danger" aria-label="Deletar" onClick={handleDelete}>
+          <button
+            className="ciclo-card__icon-btn ciclo-card__icon-btn--danger"
+            aria-label="Deletar"
+            onClick={handleDelete}
+            disabled={isDisabled}
+          >
             <span className="material-symbols-outlined">delete</span>
           </button>
         </div>
@@ -125,6 +142,7 @@ export default function CicloCard({
                   step="1"
                   value={formFocus}
                   onChange={(e) => setFormFocus(e.target.value)}
+                  disabled={isDisabled}
                 />
                 <span className="ciclo-card__suffix">min</span>
               </div>
@@ -140,6 +158,7 @@ export default function CicloCard({
                   step="1"
                   value={formShort}
                   onChange={(e) => setFormShort(e.target.value)}
+                  disabled={isDisabled}
                 />
                 <span className="ciclo-card__suffix">min</span>
               </div>
@@ -155,6 +174,7 @@ export default function CicloCard({
                   step="1"
                   value={formCycles}
                   onChange={(e) => setFormCycles(e.target.value)}
+                  disabled={isDisabled}
                 />
                 <span className="ciclo-card__suffix">ciclos</span>
               </div>
@@ -170,6 +190,7 @@ export default function CicloCard({
                   step="1"
                   value={formLong}
                   onChange={(e) => setFormLong(e.target.value)}
+                  disabled={isDisabled}
                 />
                 <span className="ciclo-card__suffix">min</span>
               </div>
@@ -179,11 +200,15 @@ export default function CicloCard({
       </div>
 
       {!editing ? (
-        <button className="ciclo-card__start-button" onClick={handleStart}>
+        <button className="ciclo-card__start-button" onClick={handleStart} disabled={isDisabled}>
           INICIAR SESSÃO
         </button>
       ) : (
-        <button className="ciclo-card__start-button ciclo-card__start-button--confirm" onClick={handleSaveSingle}>
+        <button
+          className="ciclo-card__start-button ciclo-card__start-button--confirm"
+          onClick={handleSaveSingle}
+          disabled={isDisabled}
+        >
           SALVAR
         </button>
       )}

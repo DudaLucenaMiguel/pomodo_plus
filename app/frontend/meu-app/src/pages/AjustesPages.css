@@ -58,6 +58,24 @@
   line-height: 1.3;
 }
 
+.settings-page__details {
+  font-size: var(--font-size-xs);
+  color: color-mix(in oklab, var(--color-text-light) 70%, #b0b0b0 30%);
+}
+
+.settings-page__banner {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, #fff 10%, transparent);
+}
+
+.settings-page__banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .settings-page__actions {
   display: flex;
   flex-direction: column;
@@ -75,6 +93,11 @@
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
   text-align: left;
+}
+
+.settings-page__action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .settings-page__action:hover {
@@ -120,6 +143,21 @@
 .settings-page__signout:hover {
   transform: scale(1.03);
   filter: brightness(1.05);
+}
+
+.settings-page__loading,
+.settings-page__error {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--color-surface) 85%, #000 15%);
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  text-align: center;
+  font-size: var(--font-size-sm);
+}
+
+.settings-page__error {
+  color: #ff8a80;
+  border-color: color-mix(in oklab, #ff8a80 35%, transparent);
 }
 
 @media (max-width: 480px) {

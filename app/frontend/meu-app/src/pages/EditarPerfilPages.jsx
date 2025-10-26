@@ -1,39 +1,69 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import SideBar from "../components/SideBar"
 import "./EditarPerfilPages.css"
+import { useCurrentUsuario } from "../hooks/useAuthUser"
+import { useUsuario } from "../hooks/useUsuarios"
+import { UsuariosService } from "../services/api.service"
+
+function buildAvatar(nome, email) {
+  const seed = nome || email || "Pomodoro"
+  const encoded = encodeURIComponent(seed)
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${encoded}`
+}
 
 function EditarPerfilPages() {
   const { state } = useLocation()
   const navigate = useNavigate()
+  const { usuario: authUsuario } = useCurrentUsuario()
+  const usuarioId = state?.usuarioId ?? authUsuario?.id ?? null
+  const { data: usuarioData, loading, error } = useUsuario(usuarioId)
 
-  const defaults = useMemo(
-    () => ({
-      name: "Fulano",
-      email: "fulano@email.com",
-      avatar: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
-      banner: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
-    }),
-    []
-  )
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
-  const initial = {
-    name: state?.name ?? defaults.name,
-    email: state?.email ?? defaults.email,
-    avatar: state?.avatar ?? defaults.avatar,
-    banner: state?.banner ?? defaults.banner,
-  }
-
-  const [name, setName] = useState(initial.name)
-  const [email, setEmail] = useState(initial.email)
-
-  const handleSave = () => {
-    const payload = {
-      name: String(name || "").trim(),
-      email: String(email || "").trim(),
+  useEffect(() => {
+    if (usuarioData) {
+      setName(usuarioData.nome ?? "")
+      setEmail(usuarioData.email ?? "")
     }
-    console.log("Salvar perfil (simulado):", payload)
-    navigate(-1)
+  }, [usuarioData])
+
+  const avatar = useMemo(() => buildAvatar(usuarioData?.nome, usuarioData?.email), [usuarioData])
+
+  const trimmedName = useMemo(() => String(name || "").trim(), [name])
+  const trimmedEmail = useMemo(() => String(email || "").trim(), [email])
+
+  const dirty = useMemo(() => {
+    if (!usuarioData) return false
+    const originalName = usuarioData.nome ?? ""
+    const originalEmail = usuarioData.email ?? ""
+    return trimmedName !== originalName || trimmedEmail !== originalEmail
+  }, [usuarioData, trimmedName, trimmedEmail])
+
+  const handleSave = async () => {
+    if (!usuarioId || submitting || !dirty) return
+
+    const payload = {}
+    if (trimmedName) payload.nome = trimmedName
+    if (trimmedEmail) payload.email = trimmedEmail
+    if (Object.keys(payload).length === 0) {
+      navigate(-1)
+      return
+    }
+
+    setSubmitting(true)
+    setSubmitError("")
+    try {
+      await UsuariosService.update(usuarioId, payload)
+      navigate(-1)
+    } catch (err) {
+      setSubmitError(err?.message || "Não foi possível salvar as alterações.")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -53,39 +83,62 @@ function EditarPerfilPages() {
           <div className="profile-edit-page__spacer" />
         </header>
         <div className="profile-edit-page__card">
-          <div className="profile-edit-page__fields">
-            <div className="profile-edit-page__field">
-              <span className="profile-edit-page__label">Nome</span>
-              <div className="profile-edit-page__value">
-                <input
-                  className="profile-edit-page__input"
-                  type="text"
-                  maxLength={60}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Seu nome"
-                />
-              </div>
+          {loading ? (
+            <div className="profile-edit-page__feedback">Carregando dados do perfil...</div>
+          ) : error ? (
+            <div className="profile-edit-page__feedback profile-edit-page__feedback--error">{error}</div>
+          ) : !usuarioData ? (
+            <div className="profile-edit-page__feedback profile-edit-page__feedback--error">
+              Não foi possível localizar o usuário autenticado.
             </div>
-
-            <div className="profile-edit-page__field">
-              <span className="profile-edit-page__label">E-mail</span>
-              <div className="profile-edit-page__value">
-                <input
-                  className="profile-edit-page__input"
-                  type="email"
-                  maxLength={120}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="voce@exemplo.com"
-                />
+          ) : (
+            <>
+              <div className="profile-edit-page__avatar-preview">
+                <img src={avatar} alt="Avatar" />
               </div>
-            </div>
-          </div>
+              <div className="profile-edit-page__fields">
+                <div className="profile-edit-page__field">
+                  <span className="profile-edit-page__label">Nome</span>
+                  <div className="profile-edit-page__value">
+                    <input
+                      className="profile-edit-page__input"
+                      type="text"
+                      maxLength={60}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Seu nome"
+                    />
+                  </div>
+                </div>
 
-          <button className="profile-edit-page__submit" onClick={handleSave}>
-            Salvar informações
-          </button>
+                <div className="profile-edit-page__field">
+                  <span className="profile-edit-page__label">E-mail</span>
+                  <div className="profile-edit-page__value">
+                    <input
+                      className="profile-edit-page__input"
+                      type="email"
+                      maxLength={120}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="voce@exemplo.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {submitError && (
+                <div className="profile-edit-page__feedback profile-edit-page__feedback--error">{submitError}</div>
+              )}
+
+              <button
+                className="profile-edit-page__submit"
+                onClick={handleSave}
+                disabled={!dirty || submitting}
+              >
+                {submitting ? "Salvando..." : "Salvar informações"}
+              </button>
+            </>
+          )}
         </div>
 
         <SideBar />

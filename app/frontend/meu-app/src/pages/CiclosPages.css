@@ -36,3 +36,18 @@
   gap: var(--space-4);
   align-items: start;
 }
+
+.cycles-page__feedback {
+  grid-column: 1 / -1;
+  padding: var(--space-4);
+  border-radius: var(--radius-md, 10px);
+  background: color-mix(in oklab, var(--color-surface, #1e1e1e) 85%, #000 15%);
+  border: 1px solid color-mix(in oklab, #fff 12%, transparent);
+  text-align: center;
+  font-size: var(--font-size-sm, 0.95rem);
+}
+
+.cycles-page__feedback--error {
+  color: #ff8a80;
+  border-color: color-mix(in oklab, #ff8a80 35%, transparent);
+}
