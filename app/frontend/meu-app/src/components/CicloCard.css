@@ -1,0 +1,90 @@
+/* ===== Tokens e escala fluida (somente o necessário à página) ===== */
+:root {
+  --space-1: clamp(2px, 0.3vw, 4px);
+  --space-2: clamp(4px, 0.6vw, 8px);
+  --space-3: clamp(8px, 0.9vw, 12px);
+  --space-4: clamp(12px, 1.2vw, 16px);
+  --space-5: clamp(16px, 1.6vw, 24px);
+  --radius: 12px;
+
+  --fs-sm: clamp(10px, 1vw, 12px);
+  --fs-md: clamp(14px, 1.2vw, 16px);
+  --fs-lg: clamp(18px, 2vw, 24px);
+  --fs-xl: clamp(22px, 2.4vw, 28px);
+
+  --brand: #ff0000;
+  --surface: #ffffff1a;
+  --text-white: #ffffff;
+  --text-black: #000000;
+}
+
+/* Card principal do ciclo */
+.column {
+  width: min(100%, 880px);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+/* Título do ciclo + ícone de edição */
+.row-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.text2 {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+.image {
+  width: clamp(24px, 4vw, 30px);
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+/* Linhas de parâmetros do ciclo */
+.column2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+.row-view2 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.view2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border-radius: 4px;
+  padding: var(--space-1) var(--space-3);
+}
+.text3 {
+  font-size: var(--fs-sm);
+  text-align: start;
+}
+/* Botão de iniciar sessão */
+.button {
+  background: var(--brand);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-white);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.button:hover { transform: scale(1.05); }
+/* ===== Responsividade ===== */
+@media (max-width: 480px) {
+  .row-view, .row-view2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+}

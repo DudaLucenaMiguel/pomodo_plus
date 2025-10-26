@@ -1,58 +1,92 @@
+/* ===== Tokens e escala fluida ===== */
+:root {
+  --space-1: clamp(2px, 0.3vw, 4px);
+  --space-2: clamp(4px, 0.5vw, 8px);
+  --space-3: clamp(8px, 0.8vw, 12px);
+  --space-4: clamp(12px, 1.2vw, 16px);
+  --space-5: clamp(16px, 1.6vw, 24px);
+  --radius: 10px;
+  --fs-sm: clamp(10px, 1vw, 13px);
+  --fs-md: clamp(12px, 1.2vw, 16px);
+
+  --color-bg: #ffffff1a;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-surface: #ffffff;
+}
+
+/* ===== Container principal ===== */
 .row-view3 {
-	align-self: stretch;
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	background: #FFFFFF1A;
-	border-radius: 10px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	margin: 10px 8px;
-	gap: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  width: min(100%, 880px);
+  margin-inline: auto;
 }
-.text7 {
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
+
+/* ===== Estrutura dos ícones ===== */
+.icon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  gap: var(--space-1);
 }
-.text8 {
-	color: #000000;
-	font-size: 12px;
-	font-weight: bold;
-}
-.column3 {
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	border-radius: 10px;
-	padding: 5px 13px;
-	gap: 5px;
-}
-.column4 {
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	border-radius: 10px;
-	padding: 5px 16px;
-	gap: 5px;
-}
+
+/* ===== Botão ativo ===== */
 .button-column {
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background: #FFFFFF;
-	border-radius: 10px;
-	border: none;
-	padding: 5px;
-	gap: 5px;
-	text-align: left;
+  background: var(--color-surface);
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
 }
+.button-column:hover {
+  transform: scale(1.05);
+  background: #ffffffcc;
+}
+
+/* ===== Ícones e textos ===== */
 .image2 {
-	border-radius: 10px;
-	width: 48px;
-	height: 48px;
-	object-fit: fill;
+  border-radius: var(--radius);
+  width: clamp(36px, 6vw, 48px);
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.text7, .text8 {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.text7 {
+  color: var(--color-white);
+}
+
+.text8 {
+  color: var(--color-black);
+}
+
+/* ===== Responsividade extra ===== */
+@media (max-width: 480px) {
+  .row-view3 {
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .image2 {
+    width: clamp(28px, 10vw, 42px);
+  }
 }

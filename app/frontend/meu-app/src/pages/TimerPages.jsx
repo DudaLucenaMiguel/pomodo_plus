@@ -1,8 +1,8 @@
 import React from "react";
-import "./TimerComponent.css";
-import SideBar from "./SideBar.jsx";
+import "./TimerPages.css";
+import SideBar from "../components/SideBar.jsx";
 
-function TimerComponent() {
+function TimerPages() {
   return (
     <div className="contain">
       <div className="scroll-view">
@@ -53,4 +53,4 @@ function TimerComponent() {
   );
 }
 
-export default TimerComponent;
+export default TimerPages;
