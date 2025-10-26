@@ -1,6 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./LoginPages.css";
+import { AuthService } from "../services/auth.service";
+import { useAuth } from "../context/AuthContext";
 
 function isEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
@@ -9,17 +11,20 @@ function isEmail(v) {
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const testUsers = [
-    { email: "duda@exemplo.com", password: "123456" },
-    { email: "teste@exemplo.com", password: "abcdef" },
-    { email: "user@exemplo.com", password: "senha123" },
-  ];
+  const prefillEmail = useMemo(() => location.state?.prefillEmail ?? "", [location.state]);
+
+  useEffect(() => {
+    if (prefillEmail) {
+      setEmail(prefillEmail);
+    }
+  }, [prefillEmail]);
 
   const isValid = useMemo(
     () => isEmail(email) && String(password).length >= 6,
@@ -32,20 +37,27 @@ export default function LoginPage() {
     setSubmitting(true);
     setError("");
     try {
-      const eClean = email.trim().toLowerCase();
-      const ok = testUsers.some(
-        (u) => u.email.toLowerCase() === eClean && u.password === password
-      );
-      if (!ok) {
-        setError("Credenciais inválidas. Verifique e tente novamente.");
-        return;
+      const payload = { email: email.trim(), senha: password };
+      const data = await AuthService.login(payload);
+      const usuario = data?.usuario;
+      if (!usuario?.id) {
+        throw new Error("Resposta inesperada do servidor.");
       }
-      const token = JSON.stringify({ email: eClean, ts: Date.now(), remember });
-      localStorage.setItem("auth_token", token);
+
+      login(
+        {
+          id: usuario.id,
+          name: usuario.nome,
+          email: usuario.email,
+        },
+        { remember }
+      );
+
       const redirectTo = location.state?.from?.pathname || "/timer";
       navigate(redirectTo, { replace: true });
-    } catch {
-      setError("Não foi possível entrar. Tente novamente.");
+    } catch (err) {
+      const message = err?.message || err?.raw?.response?.data?.erro;
+      setError(message || "Não foi possível entrar. Tente novamente.");
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +117,6 @@ export default function LoginPage() {
               />
               <span>Lembrar-me</span>
             </label>
-
           </div>
 
           {error && <div className="login-page__error">{error}</div>}

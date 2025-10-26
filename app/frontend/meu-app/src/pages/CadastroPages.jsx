@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CadastroPages.css";
+import { UsuariosService } from "../services/api.service";
 
 function isEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
@@ -28,13 +29,19 @@ function CadastroPages() {
     setSubmitting(true);
     setError("");
     try {
-      const payload = { name: name.trim(), email: email.trim() };
-      console.log("Cadastro simulado:", payload);
-      setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 400);
+      const payload = {
+        nome: name.trim(),
+        email: email.trim(),
+        senha: password,
+      };
+      await UsuariosService.create(payload);
+      navigate("/login", {
+        replace: true,
+        state: { prefillEmail: email.trim() },
+      });
     } catch (err) {
-      setError("Não foi possível criar sua conta. Tente novamente.");
+      const message = err?.message || err?.raw?.response?.data?.erro;
+      setError(message || "Não foi possível criar sua conta. Tente novamente.");
     } finally {
       setSubmitting(false);
     }

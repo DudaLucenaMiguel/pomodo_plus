@@ -2,18 +2,22 @@ import React, { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import "./AjustesPages.css"
 import SideBar from "../components/SideBar"
+import { useAuth } from "../context/AuthContext"
 
 function AjustesPages() {
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   const perfilSimulado = useMemo(
     () => ({
-      name: "Fulano",
-      email: "fulano@email.com",
-      avatar: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
-      banner: "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
+      name: user?.name ?? user?.nome ?? "Usuário",
+      email: user?.email ?? "",
+      avatar:
+        "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/qanzd6kx_expires_30_days.png",
+      banner:
+        "https://storage.googleapis.com/tagjs-prod.appspot.com/v1/YKqEVEQOUy/zlewvgri_expires_30_days.png",
     }),
-    []
+    [user]
   )
 
   const handleEditarPerfil = () => {
@@ -21,7 +25,7 @@ function AjustesPages() {
   }
 
   const handleSignOut = () => {
-    localStorage.removeItem("auth_token")
+    logout()
     navigate("/login", { replace: true })
   }
 
