@@ -1,18 +1,18 @@
-import React, { useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import "./CadastroPages.css"
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./CadastroPages.css";
 
 function isEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim())
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim());
 }
 
 function CadastroPages() {
-  const navigate = useNavigate()
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState("")
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const isValid = useMemo(
     () =>
@@ -20,25 +20,25 @@ function CadastroPages() {
       isEmail(email) &&
       String(password).length >= 6,
     [name, email, password]
-  )
+  );
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!isValid || submitting) return
-    setSubmitting(true)
-    setError("")
+    e.preventDefault();
+    if (!isValid || submitting) return;
+    setSubmitting(true);
+    setError("");
     try {
-      const payload = { name: name.trim(), email: email.trim() }
-      console.log("Cadastro simulado:", payload)
+      const payload = { name: name.trim(), email: email.trim() };
+      console.log("Cadastro simulado:", payload);
       setTimeout(() => {
-        navigate("/login", { replace: true })
-      }, 400)
+        navigate("/login", { replace: true });
+      }, 400);
     } catch (err) {
-      setError("Não foi possível criar sua conta. Tente novamente.")
+      setError("Não foi possível criar sua conta. Tente novamente.");
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="signup-page">
@@ -51,7 +51,9 @@ function CadastroPages() {
 
         <form className="signup-page__form" onSubmit={handleSubmit} noValidate>
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="name">Nome</label>
+            <label className="signup-page__label" htmlFor="name">
+              Nome
+            </label>
             <input
               id="name"
               type="text"
@@ -64,7 +66,9 @@ function CadastroPages() {
           </div>
 
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="email">E-mail</label>
+            <label className="signup-page__label" htmlFor="email">
+              E-mail
+            </label>
             <input
               id="email"
               type="email"
@@ -77,7 +81,9 @@ function CadastroPages() {
           </div>
 
           <div className="signup-page__field">
-            <label className="signup-page__label" htmlFor="password">Senha</label>
+            <label className="signup-page__label" htmlFor="password">
+              Senha
+            </label>
             <input
               id="password"
               type="password"
@@ -113,7 +119,7 @@ function CadastroPages() {
         </footer>
       </div>
     </div>
-  )
+  );
 }
 
-export default CadastroPages
+export default CadastroPages;
