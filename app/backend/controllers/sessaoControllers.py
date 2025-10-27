@@ -7,16 +7,26 @@ from models.sessaoModel import (
     excluir_sessao,
 )
 
+def _to_int_or_none(v):
+    if v is None or v == "":
+        return None
+    try:
+        return int(v)
+    except Exception:
+        return None
+
 def criar_sessao(payload):
-    usuario_id = (payload.get("usuario_id") or "")
-    ciclo_id = (payload.get("ciclo_id") or "")
-    assunto_id = (payload.get("assunto_id") or "")
-    tema_id = (payload.get("tema_id") or "")
-    inicio = (payload.get("inicio") or "")
-    fim = (payload.get("fim") or "")
-    status = (payload.get("status") or "")
-    if not usuario_id or not ciclo_id or not inicio or not status:
+    usuario_id = _to_int_or_none(payload.get("usuario_id"))
+    ciclo_id   = _to_int_or_none(payload.get("ciclo_id"))
+    assunto_id = _to_int_or_none(payload.get("assunto_id"))
+    tema_id    = _to_int_or_none(payload.get("tema_id"))
+    inicio     = (payload.get("inicio") or "").strip()
+    fim        = (payload.get("fim") or "").strip()
+    status     = (payload.get("status") or "completed").strip()
+
+    if not usuario_id or not inicio:
         return {"erro": "Campos obrigatórios não preenchidos."}, 400
+
     try:
         novo_id = inserir_sessao(usuario_id, ciclo_id, assunto_id, tema_id, inicio, fim, status)
         return {"mensagem": "Sessão criada com sucesso.", "id": novo_id}, 201
@@ -41,9 +51,18 @@ def editar_sessao(id, payload):
     campos = []
     valores = []
     for campo in ["usuario_id", "ciclo_id", "assunto_id", "tema_id", "inicio", "fim", "status"]:
-        if campo in payload and payload[campo]:
+        if campo in payload:
+            v = payload[campo]
+            if v is None or v == "":
+                continue
+            if campo in ("usuario_id", "ciclo_id", "assunto_id", "tema_id"):
+                v = _to_int_or_none(v)
+                if v is None:
+                    continue
+            if isinstance(v, str):
+                v = v.strip()
             campos.append(f"{campo} = ?")
-            valores.append(payload[campo].strip())
+            valores.append(v)
     if not campos:
         return {"erro": "Nenhum campo válido enviado para atualização."}, 400
     try:

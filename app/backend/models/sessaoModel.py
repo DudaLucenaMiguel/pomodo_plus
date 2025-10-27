@@ -48,9 +48,10 @@ def atualizar_sessao(id, campos, valores):
 
 def excluir_sessao(id):
     conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM sessao WHERE id = ?", (id,))
+    cur = conn.cursor()
+    cur.execute("DELETE FROM sessao WHERE id = ?", (int(id),))
+    linhas = cur.rowcount
     conn.commit()
-    linhas_afetadas = cursor.rowcount
     conn.close()
-    return linhas_afetadas
+    return linhas
+

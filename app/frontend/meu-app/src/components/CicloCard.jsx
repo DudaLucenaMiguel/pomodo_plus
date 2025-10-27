@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react"
-import "./CicloCard.css"
+import React, { useMemo, useState } from "react";
+import "./CicloCard.css";
 
 function mm(sec) {
-  return Math.round(sec / 60)
+  if (!sec) return 0;
+  return Math.round(sec / 60);
 }
 
 export default function CicloCard({
@@ -12,68 +13,78 @@ export default function CicloCard({
   shortBreakSec,
   longBreakSec,
   cyclesBeforeLongBreak,
+  tempo_estudo,
+  tempo_descanso,
+  tempo_entre_ciclos,
+  repeticoes,
   onStart,
   onUpdate,
   onDelete,
 }) {
-  const [editing, setEditing] = useState(false)
-  const [formName, setFormName] = useState(name)
-  const [formFocus, setFormFocus] = useState(mm(focusSec))
-  const [formShort, setFormShort] = useState(mm(shortBreakSec))
-  const [formLong, setFormLong] = useState(mm(longBreakSec))
-  const [formCycles, setFormCycles] = useState(cyclesBeforeLongBreak)
+  // 🔁 Adapta automaticamente os nomes conforme o backend
+  const foco = focusSec ?? (tempo_estudo ? tempo_estudo * 60 : 0);
+  const pausaCurta = shortBreakSec ?? (tempo_descanso ? tempo_descanso * 60 : 0);
+  const pausaLonga = longBreakSec ?? (tempo_entre_ciclos ? tempo_entre_ciclos * 60 : 0);
+  const ciclos = cyclesBeforeLongBreak ?? repeticoes ?? 0;
+  const nome = name ?? `Ciclo ${id}`;
+
+  const [editing, setEditing] = useState(false);
+  const [formName, setFormName] = useState(nome);
+  const [formFocus, setFormFocus] = useState(mm(foco));
+  const [formShort, setFormShort] = useState(mm(pausaCurta));
+  const [formLong, setFormLong] = useState(mm(pausaLonga));
+  const [formCycles, setFormCycles] = useState(ciclos);
 
   const handleStart = () => {
     if (typeof onStart === "function") {
-      onStart({ id, name, focusSec, shortBreakSec, longBreakSec, cyclesBeforeLongBreak })
+      onStart({
+        id,
+        name: nome,
+        focusSec: foco,
+        shortBreakSec: pausaCurta,
+        longBreakSec: pausaLonga,
+        cyclesBeforeLongBreak: ciclos,
+      });
     }
-  }
+  };
 
   const handleEdit = () => {
-    setEditing(true)
-    setFormName(name)
-    setFormFocus(mm(focusSec))
-    setFormShort(mm(shortBreakSec))
-    setFormLong(mm(longBreakSec))
-    setFormCycles(cyclesBeforeLongBreak)
-  }
+    setEditing(true);
+    setFormName(nome);
+    setFormFocus(mm(foco));
+    setFormShort(mm(pausaCurta));
+    setFormLong(mm(pausaLonga));
+    setFormCycles(ciclos);
+  };
 
   const handleSaveSingle = () => {
-    const newName = String(formName || "").trim()
+    const newName = String(formName || "").trim();
     const payload = {
       id,
-      name: newName || name,
-      focusSec: Math.max(1, Number(formFocus)) * 60,
-      shortBreakSec: Math.max(0, Number(formShort)) * 60,
-      longBreakSec: Math.max(0, Number(formLong)) * 60,
-      cyclesBeforeLongBreak: Math.max(1, Number(formCycles)),
-    }
-    const changed =
-      (newName || name) !== name ||
-      payload.focusSec !== focusSec ||
-      payload.shortBreakSec !== shortBreakSec ||
-      payload.longBreakSec !== longBreakSec ||
-      payload.cyclesBeforeLongBreak !== cyclesBeforeLongBreak
+      name: newName || nome,
+      tempo_estudo: Math.max(1, Number(formFocus)),
+      tempo_descanso: Math.max(0, Number(formShort)),
+      tempo_entre_ciclos: Math.max(0, Number(formLong)),
+      repeticoes: Math.max(1, Number(formCycles)),
+    };
 
-    if (changed) {
-      if (typeof onUpdate === "function") onUpdate(payload)
-    }
-    setEditing(false)
-  }
+    if (typeof onUpdate === "function") onUpdate(payload);
+    setEditing(false);
+  };
 
   const handleDelete = () => {
-    if (typeof onDelete === "function") onDelete(id)
-  }
+    if (typeof onDelete === "function") onDelete(id);
+  };
 
   const details = useMemo(
     () => [
-      { label: "Tempo de Foco", value: `${mm(focusSec)} min`, type: "focus" },
-      { label: "Tempo de Descanso", value: `${mm(shortBreakSec)} min`, type: "short" },
-      { label: "Número de Ciclos", value: `${cyclesBeforeLongBreak} ciclos`, type: "cycles" },
-      { label: "Descanso entre Sessões", value: `${mm(longBreakSec)} min`, type: "long" },
+      { label: "Tempo de Foco", value: `${formFocus || mm(foco)} min`, type: "focus" },
+      { label: "Tempo de Descanso", value: `${formShort || mm(pausaCurta)} min`, type: "short" },
+      { label: "Número de Ciclos", value: `${formCycles || ciclos} ciclos`, type: "cycles" },
+      { label: "Descanso entre Sessões", value: `${formLong || mm(pausaLonga)} min`, type: "long" },
     ],
-    [focusSec, shortBreakSec, longBreakSec, cyclesBeforeLongBreak]
-  )
+    [formFocus, formShort, formLong, formCycles, foco, pausaCurta, pausaLonga, ciclos]
+  );
 
   return (
     <div className="ciclo-card">
@@ -86,16 +97,24 @@ export default function CicloCard({
             maxLength={60}
           />
         ) : (
-          <span className="ciclo-card__title">{name}</span>
+          <span className="ciclo-card__title">{nome}</span>
         )}
 
         <div className="ciclo-card__icons">
           {!editing && (
-            <button className="ciclo-card__icon-btn" aria-label="Editar" onClick={handleEdit}>
+            <button
+              className="ciclo-card__icon-btn"
+              aria-label="Editar"
+              onClick={handleEdit}
+            >
               <span className="material-symbols-outlined">edit</span>
             </button>
           )}
-          <button className="ciclo-card__icon-btn ciclo-card__icon-btn--danger" aria-label="Deletar" onClick={handleDelete}>
+          <button
+            className="ciclo-card__icon-btn ciclo-card__icon-btn--danger"
+            aria-label="Deletar"
+            onClick={handleDelete}
+          >
             <span className="material-symbols-outlined">delete</span>
           </button>
         </div>
@@ -183,10 +202,13 @@ export default function CicloCard({
           INICIAR SESSÃO
         </button>
       ) : (
-        <button className="ciclo-card__start-button ciclo-card__start-button--confirm" onClick={handleSaveSingle}>
+        <button
+          className="ciclo-card__start-button ciclo-card__start-button--confirm"
+          onClick={handleSaveSingle}
+        >
           SALVAR
         </button>
       )}
     </div>
-  )
+  );
 }
