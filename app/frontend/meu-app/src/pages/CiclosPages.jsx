@@ -69,10 +69,18 @@ export default function CiclosPages() {
     try {
       const id = upd.id;
       const payload = {
-        ...(upd.tempo_estudo !== undefined && { tempo_estudo: Number(upd.tempo_estudo) }),
-        ...(upd.tempo_descanso !== undefined && { tempo_descanso: Number(upd.tempo_descanso) }),
-        ...(upd.tempo_entre_ciclos !== undefined && { tempo_entre_ciclos: Number(upd.tempo_entre_ciclos) }),
-        ...(upd.repeticoes !== undefined && { repeticoes: Number(upd.repeticoes) }),
+        ...(upd.tempo_estudo !== undefined && {
+          tempo_estudo: Number(upd.tempo_estudo),
+        }),
+        ...(upd.tempo_descanso !== undefined && {
+          tempo_descanso: Number(upd.tempo_descanso),
+        }),
+        ...(upd.tempo_entre_ciclos !== undefined && {
+          tempo_entre_ciclos: Number(upd.tempo_entre_ciclos),
+        }),
+        ...(upd.repeticoes !== undefined && {
+          repeticoes: Number(upd.repeticoes),
+        }),
         ...(upd.name && { nome: String(upd.name).trim() }),
       };
 
@@ -148,7 +156,9 @@ export default function CiclosPages() {
             <span className="cycles-page__title">Seus Ciclos</span>
           </div>
           <div className="cycles-page__list">
-            <div className="cycles-page__error">{String(error.message || error)}</div>
+            <div className="cycles-page__error">
+              {String(error.message || error)}
+            </div>
           </div>
           <SideBar />
         </div>
@@ -246,15 +256,6 @@ export default function CiclosPages() {
             </div>
           )}
 
-          {!creating && (
-            <button
-              className="ciclo-card__start-button"
-              onClick={() => setCreating(true)}
-            >
-              + Novo ciclo
-            </button>
-          )}
-
           {localData.map((c) => (
             <CicloCard
               key={c.id}
@@ -271,6 +272,14 @@ export default function CiclosPages() {
             />
           ))}
         </div>
+        {!creating && (
+          <button
+            className="ciclo-card__start-button"
+            onClick={() => setCreating(true)}
+          >
+            + Novo ciclo
+          </button>
+        )}
 
         <SideBar />
       </div>

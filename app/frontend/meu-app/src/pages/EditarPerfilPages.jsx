@@ -35,6 +35,7 @@ function EditarPerfilPages() {
   const [email, setEmail] = useState(initial.email);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const handleSave = async () => {
     if (!usuarioId) return;
@@ -53,6 +54,26 @@ function EditarPerfilPages() {
       setError(err?.message || "Não foi possível salvar.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!usuarioId) return;
+    const confirmar = window.confirm(
+      "Tem certeza que deseja excluir sua conta? Esta ação é irreversível."
+    );
+    if (!confirmar) return;
+
+    setDeleting(true);
+    setError("");
+    try {
+      await UsuariosService.remove(usuarioId);
+      localStorage.removeItem("usuario");
+      navigate("/login", { replace: true });
+    } catch (err) {
+      setError(err?.message || "Não foi possível excluir a conta.");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -112,6 +133,25 @@ function EditarPerfilPages() {
             disabled={saving}
           >
             {saving ? "Salvando..." : "Salvar informações"}
+          </button>
+
+          <button
+            className="profile-edit-page__delete"
+            onClick={handleDelete}
+            disabled={deleting}
+            style={{
+              marginTop: "12px",
+              backgroundColor: "#d9534f",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              padding: "10px",
+              width: "100%",
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+          >
+            {deleting ? "Excluindo conta..." : "Excluir conta"}
           </button>
         </div>
 

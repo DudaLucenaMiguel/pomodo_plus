@@ -36,3 +36,7 @@
   gap: var(--space-4);
   align-items: start;
 }
+
+.ciclo-card__start-button{
+  max-width: 393px;
+}
