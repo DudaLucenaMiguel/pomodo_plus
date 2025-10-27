@@ -32,6 +32,7 @@ export default function CiclosPages() {
     try {
       const payload = {
         usuario_id: usuarioId,
+        nome: String(newCycle.nome || "").trim() || null,
         tempo_estudo: newCycle.focoMin,
         tempo_descanso: newCycle.pausaCurtaMin,
         tempo_entre_ciclos: newCycle.pausaLongaMin,
@@ -44,10 +45,13 @@ export default function CiclosPages() {
         setLocalData((prev) => [
           ...prev,
           {
-            ...created,
-            focoMin: created.tempo_estudo,
-            pausaCurtaMin: created.tempo_descanso,
-            pausaLongaMin: created.tempo_entre_ciclos,
+            id: created.id,
+            nome: created.nome ?? payload.nome,
+            tempo_estudo: created.tempo_estudo ?? payload.tempo_estudo,
+            tempo_descanso: created.tempo_descanso ?? payload.tempo_descanso,
+            tempo_entre_ciclos:
+              created.tempo_entre_ciclos ?? payload.tempo_entre_ciclos,
+            repeticoes: created.repeticoes ?? payload.repeticoes,
           },
         ]);
       }
@@ -69,6 +73,7 @@ export default function CiclosPages() {
     try {
       const id = upd.id;
       const payload = {
+        ...(upd.nome !== undefined && { nome: String(upd.nome).trim() }),
         ...(upd.tempo_estudo !== undefined && {
           tempo_estudo: Number(upd.tempo_estudo),
         }),
@@ -81,7 +86,6 @@ export default function CiclosPages() {
         ...(upd.repeticoes !== undefined && {
           repeticoes: Number(upd.repeticoes),
         }),
-        ...(upd.name && { nome: String(upd.name).trim() }),
       };
 
       const resp = await CiclosService.update(id, payload);
@@ -91,11 +95,11 @@ export default function CiclosPages() {
           if (c.id !== id) return c;
           if (
             resp &&
-            (resp.tempo_estudo !== undefined ||
+            (resp.nome !== undefined ||
+              resp.tempo_estudo !== undefined ||
               resp.tempo_descanso !== undefined ||
               resp.tempo_entre_ciclos !== undefined ||
-              resp.repeticoes !== undefined ||
-              resp.nome !== undefined)
+              resp.repeticoes !== undefined)
           ) {
             return { ...c, ...resp };
           }
@@ -116,7 +120,6 @@ export default function CiclosPages() {
     }
   };
 
-  // Navega para o timer com tempos em segundos e auto-start
   const handleStart = (p) => {
     navigate("/timer", {
       state: {
@@ -260,18 +263,18 @@ export default function CiclosPages() {
             <CicloCard
               key={c.id}
               id={c.id}
-              // nomes do backend
+              nome={c.nome}
               tempo_estudo={c.tempo_estudo}
               tempo_descanso={c.tempo_descanso}
               tempo_entre_ciclos={c.tempo_entre_ciclos}
               repeticoes={c.repeticoes}
-              // callbacks
               onStart={handleStart}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
             />
           ))}
         </div>
+
         {!creating && (
           <button
             className="ciclo-card__start-button"

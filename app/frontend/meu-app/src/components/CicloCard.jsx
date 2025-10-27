@@ -9,6 +9,7 @@ function mm(sec) {
 export default function CicloCard({
   id,
   name,
+  nome,
   focusSec,
   shortBreakSec,
   longBreakSec,
@@ -21,15 +22,14 @@ export default function CicloCard({
   onUpdate,
   onDelete,
 }) {
-  // 🔁 Adapta automaticamente os nomes conforme o backend
   const foco = focusSec ?? (tempo_estudo ? tempo_estudo * 60 : 0);
   const pausaCurta = shortBreakSec ?? (tempo_descanso ? tempo_descanso * 60 : 0);
   const pausaLonga = longBreakSec ?? (tempo_entre_ciclos ? tempo_entre_ciclos * 60 : 0);
   const ciclos = cyclesBeforeLongBreak ?? repeticoes ?? 0;
-  const nome = name ?? `Ciclo ${id}`;
+  const titulo = (nome ?? name ?? `Ciclo ${id}`);
 
   const [editing, setEditing] = useState(false);
-  const [formName, setFormName] = useState(nome);
+  const [formName, setFormName] = useState(titulo);
   const [formFocus, setFormFocus] = useState(mm(foco));
   const [formShort, setFormShort] = useState(mm(pausaCurta));
   const [formLong, setFormLong] = useState(mm(pausaLonga));
@@ -39,7 +39,7 @@ export default function CicloCard({
     if (typeof onStart === "function") {
       onStart({
         id,
-        name: nome,
+        name: titulo,
         focusSec: foco,
         shortBreakSec: pausaCurta,
         longBreakSec: pausaLonga,
@@ -50,7 +50,7 @@ export default function CicloCard({
 
   const handleEdit = () => {
     setEditing(true);
-    setFormName(nome);
+    setFormName(titulo);
     setFormFocus(mm(foco));
     setFormShort(mm(pausaCurta));
     setFormLong(mm(pausaLonga));
@@ -61,13 +61,12 @@ export default function CicloCard({
     const newName = String(formName || "").trim();
     const payload = {
       id,
-      name: newName || nome,
+      nome: newName || titulo,
       tempo_estudo: Math.max(1, Number(formFocus)),
       tempo_descanso: Math.max(0, Number(formShort)),
       tempo_entre_ciclos: Math.max(0, Number(formLong)),
       repeticoes: Math.max(1, Number(formCycles)),
     };
-
     if (typeof onUpdate === "function") onUpdate(payload);
     setEditing(false);
   };
@@ -97,7 +96,7 @@ export default function CicloCard({
             maxLength={60}
           />
         ) : (
-          <span className="ciclo-card__title">{nome}</span>
+          <span className="ciclo-card__title">{titulo}</span>
         )}
 
         <div className="ciclo-card__icons">

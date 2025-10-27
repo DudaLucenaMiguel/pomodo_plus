@@ -16,31 +16,26 @@ def post_ciclo():
     body, status = criar_ciclo(payload)
     return jsonify(body), status
 
-
 @ciclo_bp.route("/ciclo", methods=["GET"])
 def get_ciclo():
     body, status = listar_ciclos()
     return jsonify(body), status
-
 
 @ciclo_bp.route("/ciclo/usuario/<int:usuario_id>", methods=["GET"])
 def get_ciclo_por_usuario(usuario_id):
     body, status = listar_ciclos_por_usuario(usuario_id)
     return jsonify(body), status
 
-
 @ciclo_bp.route("/ciclo/<int:id>", methods=["GET"])
 def get_ciclo_por_id(id):
     body, status = listar_ciclos_por_id(id)
     return jsonify(body), status
-
 
 @ciclo_bp.route("/ciclo/<int:id>", methods=["PUT"])
 def put_ciclo(id):
     payload = request.get_json(silent=True) or {}
     body, status = editar_ciclo(id, payload)
     return jsonify(body), status
-
 
 @ciclo_bp.route("/ciclo/<int:id>", methods=["DELETE"])
 def delete_ciclo(id):

@@ -1,20 +1,19 @@
 from database.db import get_connection
 
-def inserir_ciclo(usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes):
+def inserir_ciclo(usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes, nome):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
         """
-        INSERT INTO ciclo (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO ciclo (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes, nome)
+        VALUES (?, ?, ?, ?, ?, ?)
         """,
-        (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes)
+        (usuario_id, tempo_estudo, tempo_descanso, tempo_entre_ciclos, repeticoes, nome)
     )
     conn.commit()
     novo_id = cursor.lastrowid
     conn.close()
     return novo_id
-
 
 def buscar_todos_ciclos():
     conn = get_connection()
@@ -24,7 +23,6 @@ def buscar_todos_ciclos():
     conn.close()
     return dados
 
-
 def buscar_ciclos_por_usuario(usuario_id):
     conn = get_connection()
     cursor = conn.cursor()
@@ -33,7 +31,6 @@ def buscar_ciclos_por_usuario(usuario_id):
     conn.close()
     return dados
 
-
 def buscar_ciclo_por_id(id):
     conn = get_connection()
     cursor = conn.cursor()
@@ -41,7 +38,6 @@ def buscar_ciclo_por_id(id):
     row = cursor.fetchone()
     conn.close()
     return row
-
 
 def atualizar_ciclo(id, campos, valores):
     conn = get_connection()
@@ -52,7 +48,6 @@ def atualizar_ciclo(id, campos, valores):
     linhas_afetadas = cursor.rowcount
     conn.close()
     return linhas_afetadas
-
 
 def excluir_ciclo(id):
     conn = get_connection()
